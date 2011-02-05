@@ -1,0 +1,65 @@
+.disabled .x-grid3-cell {
+	color: #aaa;
+}
+.locked .x-grid3-cell {
+	background-color: #fee;
+
+}
+
+.comments {
+}
+.comments table {
+	width: 100%;
+}
+.comments table th {
+}
+.comments table .createTime {
+	width: 200px;
+}
+.comments table .user {
+	width: auto;
+}
+.comments .comment-header {
+}
+.comments .comment-item {
+/*	border-top: 1px solid #ccc; */
+}
+.comments .comment-item .comment-detail {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.comments .comment-item .comment-detail .comment-title {
+	font-weight: bold;
+}
+.comments .comment-item .comment-detail .comment-message {
+	padding: 10px;
+	padding-bottom: 0px;
+	white-space: pre-wrap;
+	margin-bottom: 10px;
+}
+.comments .comment-item .comment-changes {
+}
+.comments .comment-item .comment-changes .name {
+	font-weight: bold;
+}
+.comments .comment-item .comment-changes .from {
+	background: #fee;
+}
+.comments .comment-item .comment-changes .to-label {
+	font-weight: bold;
+}
+.comments .comment-item .comment-changes .to {
+	background: #efe;
+}
+.comments .comment-item .comment-changes .description {
+	padding: 5px;
+	margin: 5px;
+}
+.comments .comment-item .comment-changes .from .description {
+	background: #fee;
+}
+.comments .comment-item .comment-changes .to .description {
+	background: #efe;
+}

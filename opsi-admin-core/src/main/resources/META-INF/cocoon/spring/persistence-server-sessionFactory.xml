@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+  <bean id="businessSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <qualifier value="business"/>
+    <property name="dataSource" ref="businessDataSource"/>
+    <property name="annotatedClasses">
+    	<list>
+    		<value>cz.u2.eis.business.core.user.UserHibernate</value>
+    		<value>cz.u2.eis.business.core.task.TaskHibernate</value>
+    		<value>cz.u2.eis.business.core.task.TaskHistoryHibernate</value>
+    		<value>cz.u2.eis.business.core.task.TaskChangeHibernate</value>
+    		<value>cz.u2.eis.business.core.cislovani.CisloHibernate</value>
+    	</list>
+    </property>
+    <property name="hibernateProperties">
+      <value>
+        hibernate.dialect=${hibernate.dialect}
+        hibernate.hbm2ddl.auto=${hibernate.hbm2ddl.auto}
+        hibernate.show_sql=${hibernate.show_sql}
+        hibernate.format_sql=${hibernate.format_sql}
+        hibernate.use_sql_comments=${hibernate.use_sql_comments}
+        hibernate.max_fetch_depth=${hibernate.max_fetch_depth}
+        hibernate.jdbc.batch_size=${hibernate.jdbc.batch_size}
+        hibernate.default_batch_fetch_size=${hibernate.default_batch_fetch_size}
+      </value>
+    </property>
+    <property name="typeDefinitions">
+    	<list>
+    		<bean class="org.springframework.orm.hibernate3.TypeDefinitionBean">
+    			<property name="typeName" value="uuid"/>
+    			<property name="typeClass" value="cz.u2.eis.valueObjects.hibernate.UUIDStringUserType"/>
+    			<property name="parameters" value=""/>
+    		</bean>
+    	</list>
+    </property>
+    <property name="entityInterceptor">
+    	<bean class="cz.u2.eis.valueObjects.hibernate.HibernateValueObjectInterceptor">
+    	</bean>
+    </property>
+  </bean>
+
+  <bean id="businessTxManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="businessSessionFactory"/>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="businessTxManager"/>
+
+  <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+</beans>

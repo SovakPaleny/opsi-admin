@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+ <appender class="ch.qos.logback.core.ConsoleAppender" name="RootConsoleAppender">
+   <layout class="ch.qos.logback.classic.PatternLayout">
+     <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+   </layout>
+ </appender>
+ <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RootFileAppender">
+   <append>true</append>
+   <maxHistory>30</maxHistory>
+   <file>${eis.home}/logs/eshop-wui.log</file>
+   <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+     <fileNamePattern>${eis.home}/logs/business-wui.%d{yyyy-MM-dd}.gz</fileNamePattern>
+   </rollingPolicy>
+   <layout class="ch.qos.logback.classic.PatternLayout">
+     <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+   </layout>
+ </appender>
+ <logger name="cz.u2">
+   <level value="debug"/>
+ </logger>
+ <logger name="cz.muni">
+   <level value="debug"/>
+ </logger>
+ <root>
+   <level value="info"/>
+   <appender-ref ref="RootConsoleAppender"/>
+   <appender-ref ref="RootFileAppender"/>
+ </root>
+</configuration>

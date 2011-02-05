@@ -1,0 +1,96 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+  <security:http auto-config="true"
+  	access-decision-manager-ref="accessDecisionManager"
+  	servlet-api-provision="true">
+<!--
+    <security:intercept-url pattern="/login.jsp" filters="none" />
+-->
+<!--
+    <security:intercept-url pattern="/js/**" filters="none" />
+    <security:intercept-url pattern="/css/**" filters="none" />
+    <security:intercept-url pattern="/images/**" filters="none" />
+    <security:intercept-url pattern="/wallpapers/**" filters="none" />
+    <security:intercept-url pattern="/viewer/desktop.css" filters="none" />
+    <security:intercept-url pattern="/applications/**" filters="none" />
+    <security:intercept-url pattern="/services/httpRemoteAuthenticationManager" filters="none" />
+    <security:intercept-url pattern="/services/**" access="ROLE_USER" />
+    <security:intercept-url pattern="/**" access="ROLE_USER" />
+-->
+<!--     <security:intercept-url pattern="/**" access="ROLE_USER,ROLE_ANONYMOUS" /> -->
+<!--    <security:form-login login-page="/login.do" default-target-url="/" authentication-failure-url="/login.do?login_error"/>-->
+    <security:form-login login-page="/login.do"
+    	authentication-failure-handler-ref="authenticationHandler"
+    	authentication-success-handler-ref="authenticationHandler"/>
+    <security:anonymous  />
+    <security:http-basic />
+    <security:logout success-handler-ref="authenticationHandler" />
+<!--    <security:remember-me key="eshop-wui" user-service-ref="apsiUserService"/>-->
+  </security:http>
+
+	<bean id="authenticationHandler" class="cz.u2.eis.business.wui.remote.authentication.AuthenticationHandler"/>
+
+  <security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"
+  	access-decision-manager-ref="businessDecisionManager"/>
+
+  <security:authentication-manager alias="authenticationManager">
+  	<security:authentication-provider ref="daoAuthenticationProvider"/>
+  	<security:authentication-provider ref="daoAuthenticationProviderBusiness"/>
+  </security:authentication-manager>
+
+  <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+	<property name="allowIfAllAbstainDecisions" value="true" />
+	<property name="decisionVoters">
+		<list>
+			<ref bean="roleVoter" />
+			<ref bean="authenticatedVoter" />
+		</list>
+	</property>
+  </bean>
+
+  <bean id="businessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+  	<qualifier value="business"/>
+	<property name="allowIfAllAbstainDecisions" value="true" />
+	<property name="decisionVoters">
+		<list>
+			<ref bean="roleVoter" />
+			<ref bean="authenticatedVoter" />
+		</list>
+	</property>
+  </bean>
+
+  <bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter"/>
+  <bean id="authenticatedVoter" class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+
+  <bean id="daoAuthenticationProvider"
+	   class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <property name="userDetailsService" ref="inMemoryDaoImpl"/>
+  </bean>
+
+  <bean id="daoAuthenticationProviderBusiness"
+	   class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <property name="userDetailsService" ref="userService"/>
+  </bean>
+
+  <bean id="inMemoryDaoImpl" class="org.springframework.security.core.userdetails.memory.InMemoryDaoImpl">
+  	<property name="userMap">
+		<value>
+  			autor=autor,ROLE_USER,ROLE_ADMIN,ROLE_AUTHOR
+ 		</value>
+  	</property>
+  </bean>
+
+<!--  <bean id="loggerListener" class="org.springframework.security.event.authentication.LoggerListener" />-->
+
+  <!-- Allows remote clients to check if a username/password is valid -->
+<!--
+  <bean id="remoteAuthenticationManager"
+      class="org.springframework.security.providers.rcp.RemoteAuthenticationManagerImpl">
+    <property name="authenticationManager" ref="authenticationManager" />
+  </bean>
+-->
+</beans>

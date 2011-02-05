@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+<!--
+ <bean id="businessEmf"
+	class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<property name="dataSource" ref="businessDataSource" />
+	<property name="loadTimeWeaver">
+		<bean
+			class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver" />
+	</property>
+	<property name="jpaVendorAdapter">
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+			<property name="databasePlatform" value="${hibernate.dialect}"></property>
+		</bean>
+	</property>
+	<property name="jpaProperties">
+      <value>
+        hibernate.dialect=${hibernate.dialect}
+        hibernate.hbm2ddl.auto=${hibernate.hbm2ddl.auto}
+        hibernate.show_sql=${hibernate.show_sql}
+        hibernate.format_sql=${hibernate.format_sql}
+        hibernate.use_sql_comments=${hibernate.use_sql_comments}
+        hibernate.max_fetch_depth=${hibernate.max_fetch_depth}
+        hibernate.jdbc.batch_size=${hibernate.jdbc.batch_size}
+        hibernate.default_batch_fetch_size=${hibernate.default_batch_fetch_size}
+      </value>
+	</property>
+</bean>
+
+
+  <bean id="businessTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="businessEmf"/>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="businessTxManager"/>
+
+  <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+
+  <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+-->
+
+</beans>
