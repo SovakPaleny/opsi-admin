@@ -8,7 +8,7 @@
         ">
 
 
-	<context:component-scan base-package="cz.u2.eis.business.wui">
+	<context:component-scan base-package="cz.muni.ucn.opsi.wui">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 

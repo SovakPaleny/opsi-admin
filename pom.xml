@@ -139,6 +139,11 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-ldap</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>javax.annotation</groupId>
 				<artifactId>jsr250-api</artifactId>
 				<version>1.0</version>

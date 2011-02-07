@@ -32,28 +32,17 @@
 <!--    <security:remember-me key="eshop-wui" user-service-ref="apsiUserService"/>-->
   </security:http>
 
-	<bean id="authenticationHandler" class="cz.u2.eis.business.wui.remote.authentication.AuthenticationHandler"/>
+	<bean id="authenticationHandler" class="cz.muni.ucn.opsi.wui.remote.authentication.AuthenticationHandler"/>
 
   <security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"
-  	access-decision-manager-ref="businessDecisionManager"/>
+  	access-decision-manager-ref="accessDecisionManager"/>
 
   <security:authentication-manager alias="authenticationManager">
   	<security:authentication-provider ref="daoAuthenticationProvider"/>
-  	<security:authentication-provider ref="daoAuthenticationProviderBusiness"/>
+  	<security:authentication-provider ref="ldapAuthProvider"/>
   </security:authentication-manager>
 
   <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
-	<property name="allowIfAllAbstainDecisions" value="true" />
-	<property name="decisionVoters">
-		<list>
-			<ref bean="roleVoter" />
-			<ref bean="authenticatedVoter" />
-		</list>
-	</property>
-  </bean>
-
-  <bean id="businessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
-  	<qualifier value="business"/>
 	<property name="allowIfAllAbstainDecisions" value="true" />
 	<property name="decisionVoters">
 		<list>
@@ -69,11 +58,6 @@
   <bean id="daoAuthenticationProvider"
 	   class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
     <property name="userDetailsService" ref="inMemoryDaoImpl"/>
-  </bean>
-
-  <bean id="daoAuthenticationProviderBusiness"
-	   class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-    <property name="userDetailsService" ref="userService"/>
   </bean>
 
   <bean id="inMemoryDaoImpl" class="org.springframework.security.core.userdetails.memory.InMemoryDaoImpl">
@@ -93,4 +77,55 @@
     <property name="authenticationManager" ref="authenticationManager" />
   </bean>
 -->
+
+<!--
+	<security:ldap-server url="${ldap.server}" id="ldapServer">
+	</security:ldap-server>
+    <security:ldap-authentication-provider user-search-filter="(uid={0})"
+          user-search-base="ou=people"/>
+ -->
+
+	<bean id="contextSource"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+		<constructor-arg value="${ldap.server}" />
+		<property name="userDn" value="${ldap.bindDn}" />
+		<property name="password" value="${ldap.bindPassword}" />
+	</bean>
+
+	<bean id="ldapAuthProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+		<constructor-arg>
+			<bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+				<constructor-arg ref="contextSource" />
+				<property name="userDnPatterns">
+					<list>
+<!--						<value>uid={0},ou=people</value>-->
+						<value>CN={0},OU=Users</value>
+						<value>CN={0},OU=System</value>
+						<value>CN={0},CN=System</value>
+					</list>
+				</property>
+				<property name="userSearch">
+					<bean class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+						<constructor-arg value="${ldap.searchBase}"/>
+						<constructor-arg value="${ldap.searchFilter}"/>
+						<constructor-arg ref="contextSource"/>
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
+		<constructor-arg>
+			<bean class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+				<constructor-arg ref="contextSource" />
+				<constructor-arg value="${ldap.group.searchBase}" />
+				<property name="groupRoleAttribute" value="cn" />
+				<property name="convertToUpperCase" value="true"/>
+				<property name="groupSearchFilter" value="${ldap.group.searchFilter}"/>
+				<property name="rolePrefix" value="ROLE_"/>
+				<property name="searchSubtree" value="true"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+
+
 </beans>

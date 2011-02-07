@@ -157,7 +157,7 @@
 
     <servlet-mapping>
         <servlet-name>EventService</servlet-name>
-        <url-pattern>/cz.u2.eis.business.wui.gwt.DesktopApp/gwteventservice</url-pattern>
+        <url-pattern>/cz.muni.ucn.opsi.wui.gwt.OpsiAdminApp/gwteventservice</url-pattern>
     </servlet-mapping>
 
     <session-config>

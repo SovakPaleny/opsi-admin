@@ -10,9 +10,9 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
         ">
 
-	<context:component-scan base-package="cz.u2.eis.business.core" />
+	<context:component-scan base-package="cz.muni.ucn.opsi.core" />
 
-
+<!--
 	<bean id="businessMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean">
 		<qualifier value="business" />
 		<property name="mappingFiles">
@@ -34,59 +34,5 @@
 			<idref bean="businessMapper" />
 		</property>
 	</bean>
-
-	<bean id="taskFlowDescriptor" class="cz.u2.eis.flow.core.DefaultFlowDescriptor">
-		<property name="id"><util:constant static-field="cz.u2.eis.business.core.task.TaskServiceImpl.FLOW_TASK_ID"/></property>
-		<property name="beanClass" value="cz.u2.eis.business.api.task.Task"/>
-		<property name="flowStates">
-			<list>
-				<ref bean="task.NEW"/>
-				<ref bean="task.ACCEPTED"/>
-				<ref bean="task.VALIDATE"/>
-				<ref bean="task.CLOSED"/>
-			</list>
-		</property>
-		<property name="startFlowState" ref="task.NEW"/>
-		<property name="cislovaniPrefix" value="TASK-"/>
-	</bean>
-
-	<bean id="task.NEW" class="cz.u2.eis.flow.core.DefaultFlowState">
-		<property name="id" value="NEW"/>
-		<property name="startState" value="true"/>
-		<property name="transitions">
-			<list>
-				<bean class="cz.u2.eis.flow.core.DefaultFlowTransition"
-					p:id="accept" p:state-ref="task.ACCEPTED" />
-				<bean class="cz.u2.eis.flow.core.DefaultFlowTransition"
-					p:id="reject" p:state-ref="task.VALIDATE" />
-			</list>
-		</property>
-	</bean>
-	<bean id="task.ACCEPTED" class="cz.u2.eis.flow.core.DefaultFlowState">
-		<property name="id" value="ACCEPTED"/>
-		<property name="transitions">
-			<list>
-				<bean class="cz.u2.eis.flow.core.DefaultFlowTransition"
-					p:id="finish" p:state-ref="task.VALIDATE" />
-				<bean class="cz.u2.eis.flow.core.DefaultFlowTransition"
-					p:id="forward" p:state-ref="task.NEW" />
-			</list>
-		</property>
-	</bean>
-	<bean id="task.VALIDATE" class="cz.u2.eis.flow.core.DefaultFlowState">
-		<property name="id" value="VALIDATE"/>
-		<property name="transitions">
-			<list>
-				<bean class="cz.u2.eis.flow.core.DefaultFlowTransition"
-					p:id="failed" p:state-ref="task.NEW" />
-				<bean class="cz.u2.eis.flow.core.DefaultFlowTransition"
-					p:id="close" p:state-ref="task.CLOSED" />
-			</list>
-		</property>
-	</bean>
-	<bean id="task.CLOSED" class="cz.u2.eis.flow.core.DefaultFlowState">
-		<property name="id" value="CLOSED"/>
-		<property name="endState" value="true"/>
-	</bean>
-
+ -->
 </beans>

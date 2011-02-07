@@ -8,6 +8,7 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
+<!--
   <bean id="businessSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
     <qualifier value="business"/>
     <property name="dataSource" ref="businessDataSource"/>
@@ -54,5 +55,6 @@
   <tx:annotation-driven transaction-manager="businessTxManager"/>
 
   <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+ -->
 
 </beans>

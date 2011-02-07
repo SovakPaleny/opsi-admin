@@ -14,12 +14,12 @@
 <!--   <inherits name='com.extjs.gxt.samples.resources.Resources' /> -->
 	<inherits name='com.extjs.gxt.desktop.WebDesktop' />
 
-	<stylesheet src="business.css" />
+	<stylesheet src="opsi-admin.css" />
 
-	<entry-point class='cz.u2.eis.business.wui.gwt.client.BusinessApp' />
+	<entry-point class='cz.muni.ucn.opsi.wui.gwt.client.OpsiAdminApp' />
 
-    <generate-with class="cz.u2.eis.business.wui.gwt.rebind.beanModel.BeanModelGenerator">
-        <when-type-assignable class="cz.u2.eis.business.wui.gwt.client.beanModel.BeanModelLookup"/>
+    <generate-with class="cz.muni.ucn.opsi.wui.gwt.rebind.beanModel.BeanModelGenerator">
+        <when-type-assignable class="cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelLookup"/>
     </generate-with>
 
 </module>

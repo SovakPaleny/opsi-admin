@@ -15,7 +15,7 @@
 
 	<context:annotation-config/>
 
-	<context:component-scan base-package="cz.u2.eis.business.wui.remote">
+	<context:component-scan base-package="cz.muni.ucn.opsi.wui.remote">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
