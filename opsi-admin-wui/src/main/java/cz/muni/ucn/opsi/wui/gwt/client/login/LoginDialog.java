@@ -49,7 +49,7 @@ public class LoginDialog extends Dialog {
 		setButtonAlign(HorizontalAlignment.LEFT);
 		setButtons("");
 		setIcon(IconHelper.createStyle("user"));
-		setHeading("U-2 EIS Business");
+		setHeading("OPSI Admin");
 		setModal(true);
 		setBodyBorder(true);
 		setBodyStyle("padding: 8px;background: none");

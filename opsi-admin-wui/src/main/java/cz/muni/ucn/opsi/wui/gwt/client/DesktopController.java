@@ -61,7 +61,7 @@ public class DesktopController extends Controller {
 		if (LoginController.LOGIN_OK == type) {
 			showDesktop();
 			JSONObject object = event.getData();
-			desktop.getStartMenu().setHeading(object.get("username").isString().stringValue());
+			desktop.getStartMenu().setHeading(object.get("displayName").isString().stringValue());
 		} else if (LoginController.LOGGED_OUT == type) {
 
 			List<Window> windows = desktop.getWindows();
