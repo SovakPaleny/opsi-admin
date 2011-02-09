@@ -44,13 +44,13 @@ public class GroupJSO extends JavaScriptObject implements BeanModelTag {
 	/**
 	 * @param name the name to set
 	 */
-	public final native  void setName(String name) /*-{
+	public final native void setName(String name) /*-{
 		this.name = name;
 	}-*/;
 	/**
 	 * @return the role
 	 */
-	public final native  String getRole() /*-{
+	public final native String getRole() /*-{
 		return this.role;
 	}-*/;
 	/**

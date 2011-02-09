@@ -14,7 +14,7 @@ import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
  *
  */
 public class ClientJSO extends JavaScriptObject implements BeanModelTag {
-	public static final String CLASS_NAME = "cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO";
+	public static final String CLASS_NAME = "cz.muni.ucn.opsi.wui.gwt.client.client.ClientJSO";
 /*
 	private String uuid;
 	private String name;

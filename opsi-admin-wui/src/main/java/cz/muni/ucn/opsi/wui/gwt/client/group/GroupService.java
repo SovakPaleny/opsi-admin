@@ -114,9 +114,9 @@ public class GroupService {
 
 		request.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-		JSONObject userJson = transform(group);
+		JSONObject groupJson = transform(group);
 
-		String data = userJson.toString();
+		String data = groupJson.toString();
 		request.setRequestData(data);
 		request.setHeader("Content-Type", "application/json");
 

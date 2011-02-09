@@ -105,9 +105,6 @@ public class GroupEditWindow extends Window {
 		TextField<String> role = new TextField<String>();
 		role.setName("role");
 		role.setFieldLabel(groupConstants.getRole());
-		role.setMinLength(0);
-		role.setAllowBlank(true);
-		role.setAutoValidate(true);
 		formPanel.add(role, new FormData(FIELD_SPEC));
 
 		add(form, new FitData());
