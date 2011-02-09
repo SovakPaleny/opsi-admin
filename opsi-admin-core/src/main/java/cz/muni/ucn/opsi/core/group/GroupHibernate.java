@@ -3,15 +3,18 @@
  */
 package cz.muni.ucn.opsi.core.group;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 
+import cz.muni.ucn.opsi.core.client.ClientHibernate;
 import cz.u2.eis.valueObjects.hibernate.HibernateValueObject;
 
 /**
@@ -25,6 +28,8 @@ public class GroupHibernate extends HibernateValueObject {
 
 	private String name;
 	private String role;
+
+	private List<ClientHibernate> clients;
 
 	/**
 	 *
@@ -67,6 +72,18 @@ public class GroupHibernate extends HibernateValueObject {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
+	/**
+	 * @return the clients
+	 */
+	@OneToMany(mappedBy="group")
+	public List<ClientHibernate> getClients() {
+		return clients;
+	}
+	/**
+	 * @param clients the clients to set
+	 */
+	public void setClients(List<ClientHibernate> clients) {
+		this.clients = clients;
+	}
 
 }

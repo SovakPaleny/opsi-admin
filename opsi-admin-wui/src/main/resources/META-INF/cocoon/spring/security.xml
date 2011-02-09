@@ -18,8 +18,8 @@
     <security:intercept-url pattern="/viewer/desktop.css" filters="none" />
     <security:intercept-url pattern="/applications/**" filters="none" />
     <security:intercept-url pattern="/services/httpRemoteAuthenticationManager" filters="none" />
-    <security:intercept-url pattern="/services/**" access="ROLE_USER" />
     <security:intercept-url pattern="/**" access="ROLE_USER" />
+    <security:intercept-url pattern="/remote/**" access="ROLE_USER" />
 -->
 <!--     <security:intercept-url pattern="/**" access="ROLE_USER,ROLE_ANONYMOUS" /> -->
 <!--    <security:form-login login-page="/login.do" default-target-url="/" authentication-failure-url="/login.do?login_error"/>-->

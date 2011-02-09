@@ -54,8 +54,6 @@ public class GroupServiceImpl implements GroupService, ApplicationEventPublisher
 	@Override
 	@Transactional(readOnly=false)
 	public void saveGroup(Group group) {
-
-
         Group loaded = groupDao.get(group.getUuid());
         boolean newGroup = (null == loaded);
 
@@ -93,6 +91,16 @@ public class GroupServiceImpl implements GroupService, ApplicationEventPublisher
 	public List<Group> listGroups() {
 		return groupDao.list();
 	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.group.GroupService#getGroup(java.util.UUID)
+	 */
+	@Override
+	@Transactional
+	public Group getGroup(UUID uuid) {
+		return groupDao.get(uuid);
+	}
+
 
 	/* (non-Javadoc)
 	 * @see org.springframework.context.ApplicationEventPublisherAware#setApplicationEventPublisher(org.springframework.context.ApplicationEventPublisher)

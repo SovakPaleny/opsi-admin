@@ -74,7 +74,7 @@ public class GroupService {
 	 * @param group
 	 * @param remoteRequestCallback
 	 */
-	public void editUser(GroupJSO group, RemoteRequestCallback<GroupJSO> callback) {
+	public void editGroup(GroupJSO group, RemoteRequestCallback<GroupJSO> callback) {
 
 
 		RemoteRequest<GroupJSO> request = new RemoteRequest<GroupJSO>(RequestBuilder.POST,

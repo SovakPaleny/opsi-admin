@@ -23,6 +23,7 @@ import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.google.gwt.json.client.JSONObject;
 
+import cz.muni.ucn.opsi.wui.gwt.client.client.ClientController;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupController;
 import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
 
@@ -139,18 +140,19 @@ public class DesktopController extends Controller {
 
 		Shortcut s3 = new Shortcut();
 		s3.setText("Skupiny");
-		s3.setId("users-shortcut");
+		s3.setId("groups-shortcut");
 		s3.setData("event", GroupController.GROUPS);
 		s3.addSelectionListener(shortcutListener);
 		desktop.addShortcut(s3);
-/*
+
 		Shortcut s4 = new Shortcut();
-		s4.setText("Organizační struktura");
-		s4.setId("organization-shortcut");
-		s4.setData("event", OrganizationController.ORGANIZATION);
+		s4.setText("Klienti");
+		s4.setId("clients-shortcut");
+		s4.setData("event", ClientController.CLIENTS);
 		s4.addSelectionListener(shortcutListener);
 		desktop.addShortcut(s4);
 
+/*
 		Shortcut s5 = new Shortcut();
 		s5.setText("Úkoly");
 		s5.setId("tasks-shortcut");
@@ -169,13 +171,14 @@ public class DesktopController extends Controller {
 		menuItem.addSelectionListener(menuListener);
 		menuItem.setData("event", GroupController.GROUPS);
 		menu.add(menuItem);
-		/*
-		menuItem = new MenuItem("Organizační struktura");
-		menuItem.setIcon(IconHelper.createStyle("organization"));
+
+		menuItem = new MenuItem("Klienti");
+		menuItem.setIcon(IconHelper.createStyle("clients"));
 		menuItem.addSelectionListener(menuListener);
-		menuItem.setData("event", OrganizationController.ORGANIZATION);
+		menuItem.setData("event", ClientController.CLIENTS);
 		menu.add(menuItem);
 
+/*
 		menuItem = new MenuItem("Úkoly");
 		menuItem.setIcon(IconHelper.createStyle("tasks"));
 		menuItem.addSelectionListener(menuListener);

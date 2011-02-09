@@ -45,4 +45,11 @@ public interface GroupService {
 	@Secured("ROLE_USER")
 	List<Group> listGroups();
 
+	/**
+	 * @param groupUuid
+	 * @return
+	 */
+	@Secured("ROLE_USER")
+	Group getGroup(UUID uuid);
+
 }

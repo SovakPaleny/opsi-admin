@@ -73,8 +73,8 @@ public class GroupEditView extends View {
 		if (null == group) {
 			groupService.createGroup(new RemoteRequestCallback<GroupJSO>() {
 				@Override
-				public void onRequestSuccess(GroupJSO user) {
-					editGroupWindow(user, true);
+				public void onRequestSuccess(GroupJSO client) {
+					editGroupWindow(client, true);
 				}
 
 				@Override
@@ -83,10 +83,10 @@ public class GroupEditView extends View {
 				}
 			});
 		} else {
-			groupService.editUser(group, new RemoteRequestCallback<GroupJSO>() {
+			groupService.editGroup(group, new RemoteRequestCallback<GroupJSO>() {
 				@Override
-				public void onRequestSuccess(GroupJSO user) {
-					editGroupWindow(user, false);
+				public void onRequestSuccess(GroupJSO client) {
+					editGroupWindow(client, false);
 				}
 
 				@Override

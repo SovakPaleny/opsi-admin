@@ -45,6 +45,7 @@ public class GroupDaoHibernate implements GroupDao {
 		GroupHibernate toSave = transform(saved, group);
 
 		session.save(toSave);
+		session.flush();
 	}
 
 

@@ -15,6 +15,7 @@
     <property name="annotatedClasses">
     	<list>
     		<value>cz.muni.ucn.opsi.core.group.GroupHibernate</value>
+    		<value>cz.muni.ucn.opsi.core.client.ClientHibernate</value>
     	</list>
     </property>
     <property name="hibernateProperties">
