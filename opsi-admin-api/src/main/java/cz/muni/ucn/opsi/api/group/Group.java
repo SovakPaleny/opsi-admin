@@ -3,6 +3,8 @@
  */
 package cz.muni.ucn.opsi.api.group;
 
+import java.util.UUID;
+
 import cz.u2.eis.valueObjects.ValueObject;
 
 /**
@@ -10,6 +12,20 @@ import cz.u2.eis.valueObjects.ValueObject;
  *
  */
 public class Group extends ValueObject {
+	private static final long serialVersionUID = 377295439759900534L;
+
+	/**
+	 *
+	 */
+	public Group() {
+		super();
+	}
+	/**
+	 * @param uuid
+	 */
+	public Group(UUID uuid) {
+		super(uuid);
+	}
 
 	private String name;
 	private String role;

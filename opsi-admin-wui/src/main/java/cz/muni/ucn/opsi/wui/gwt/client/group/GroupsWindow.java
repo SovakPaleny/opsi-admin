@@ -59,9 +59,9 @@ public class GroupsWindow extends Window {
 	private MenuItem contextMenuRemove;
 
 	/**
-	 * @param lifecycleEventJSO
+	 *
 	 */
-	public void onLifecycleEvent(LifecycleEventJSO lifecycleEventJSO) {
+	public GroupsWindow() {
 		factory = BeanModelLookup.get().getFactory(GroupJSO.CLASS_NAME);
 
 		groupConstants = GWT.create(GroupConstants.class);
@@ -234,6 +234,21 @@ public class GroupsWindow extends Window {
 		menu.add(contextMenuRemove);
 
 		return menu;
+	}
+
+	/**
+	 * @param le
+	 */
+	public void onLifecycleEvent(LifecycleEventJSO le) {
+		BeanModel model = factory.createModel(le.getBean());
+		if (LifecycleEventJSO.CREATED == le.getEventType()) {
+			store.add(model);
+		} else if (LifecycleEventJSO.MODIFIED == le.getEventType()) {
+			store.update(model);
+		} else if (LifecycleEventJSO.DELETED == le.getEventType()) {
+			store.remove(model);
+		}
+
 	}
 
 	/**

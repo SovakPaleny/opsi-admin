@@ -59,7 +59,7 @@ public class GroupEditWindow extends Window {
 		setIcon(IconHelper.createStyle("icon-grid"));
 		setMinimizable(true);
 		setMaximizable(true);
-		setSize(400, 600);
+		setSize(400, 150);
 //		setBodyStyle("padding: 0px; ");
 
 //		FormLayout layout = new FormLayout();

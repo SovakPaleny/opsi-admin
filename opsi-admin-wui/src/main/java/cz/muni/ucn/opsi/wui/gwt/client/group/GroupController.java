@@ -89,7 +89,7 @@ public class GroupController extends Controller {
 	 * @param event
 	 */
 	private void groupDelete(AppEvent event) {
-		forwardToView(groupEditView, event);
+		forwardToView(groupsView, event);
 	}
 
 	/**

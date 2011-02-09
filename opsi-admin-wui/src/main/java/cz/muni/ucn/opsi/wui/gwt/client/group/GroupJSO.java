@@ -19,6 +19,10 @@ public class GroupJSO extends JavaScriptObject implements BeanModelTag {
 	private String name;
 	private String role;
 */
+
+	protected GroupJSO() {
+	}
+
 	/**
 	 * @return the uuid
 	 */
