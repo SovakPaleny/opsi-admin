@@ -23,6 +23,7 @@ import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.google.gwt.json.client.JSONObject;
 
+import cz.muni.ucn.opsi.wui.gwt.client.group.GroupController;
 import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
 
 /**
@@ -135,14 +136,14 @@ public class DesktopController extends Controller {
 				itemSelected(ce);
 			}
 		};
-/*
+
 		Shortcut s3 = new Shortcut();
-		s3.setText("Uživatelé");
+		s3.setText("Skupiny");
 		s3.setId("users-shortcut");
-		s3.setData("event", UsersController.USERS);
+		s3.setData("event", GroupController.GROUPS);
 		s3.addSelectionListener(shortcutListener);
 		desktop.addShortcut(s3);
-
+/*
 		Shortcut s4 = new Shortcut();
 		s4.setText("Organizační struktura");
 		s4.setId("organization-shortcut");
@@ -162,13 +163,13 @@ public class DesktopController extends Controller {
 		StartMenu menu = taskBar.getStartMenu();
 		menu.setHeading("Test");
 		menu.setIconStyle("user");
-/*
-		MenuItem menuItem = new MenuItem("Uživatelé");
-		menuItem.setIcon(IconHelper.createStyle("users"));
-		menuItem.addSelectionListener(menuListener);
-		menuItem.setData("event", UsersController.USERS);
-		menu.add(menuItem);
 
+		MenuItem menuItem = new MenuItem("Skupiny");
+		menuItem.setIcon(IconHelper.createStyle("groups"));
+		menuItem.addSelectionListener(menuListener);
+		menuItem.setData("event", GroupController.GROUPS);
+		menu.add(menuItem);
+		/*
 		menuItem = new MenuItem("Organizační struktura");
 		menuItem.setIcon(IconHelper.createStyle("organization"));
 		menuItem.addSelectionListener(menuListener);
