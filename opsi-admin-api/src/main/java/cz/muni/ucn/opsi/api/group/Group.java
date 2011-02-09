@@ -14,6 +14,9 @@ import cz.u2.eis.valueObjects.ValueObject;
 public class Group extends ValueObject {
 	private static final long serialVersionUID = 377295439759900534L;
 
+	private String name;
+	private String role;
+
 	/**
 	 *
 	 */
@@ -27,8 +30,6 @@ public class Group extends ValueObject {
 		super(uuid);
 	}
 
-	private String name;
-	private String role;
 	/**
 	 * @return the name
 	 */

@@ -42,6 +42,7 @@ public interface GroupService {
 	/**
 	 * @return
 	 */
+	@Secured("ROLE_USER")
 	List<Group> listGroups();
 
 }

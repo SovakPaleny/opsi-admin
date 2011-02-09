@@ -8,17 +8,13 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
-<!--
-  <bean id="businessSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-    <qualifier value="business"/>
-    <property name="dataSource" ref="businessDataSource"/>
+
+  <bean id="opsiSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <qualifier value="opsi"/>
+    <property name="dataSource" ref="opsiDataSource"/>
     <property name="annotatedClasses">
     	<list>
-    		<value>cz.u2.eis.business.core.user.UserHibernate</value>
-    		<value>cz.u2.eis.business.core.task.TaskHibernate</value>
-    		<value>cz.u2.eis.business.core.task.TaskHistoryHibernate</value>
-    		<value>cz.u2.eis.business.core.task.TaskChangeHibernate</value>
-    		<value>cz.u2.eis.business.core.cislovani.CisloHibernate</value>
+    		<value>cz.muni.ucn.opsi.core.group.GroupHibernate</value>
     	</list>
     </property>
     <property name="hibernateProperties">
@@ -48,13 +44,12 @@
     </property>
   </bean>
 
-  <bean id="businessTxManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-    <property name="sessionFactory" ref="businessSessionFactory"/>
+  <bean id="opsiTxManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="opsiSessionFactory"/>
   </bean>
 
-  <tx:annotation-driven transaction-manager="businessTxManager"/>
+  <tx:annotation-driven transaction-manager="opsiTxManager"/>
 
   <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
- -->
 
 </beans>
