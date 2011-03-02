@@ -3,12 +3,19 @@
  */
 package cz.muni.ucn.opsi.core.client;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +37,7 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	private GroupService groupService;
 	private ClientDao clientDao;
 	private ApplicationEventPublisher eventPublisher;
+	private AccessDecisionManager accessDecisionManager;
 
 	/* (non-Javadoc)
 	 * @see cz.muni.ucn.opsi.api.client.ClientService#createClient(java.util.UUID)
@@ -38,6 +46,9 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	@Transactional
 	public Client createClient(UUID groupUuid) {
 		Group group = groupService.getGroup(groupUuid);
+
+		checkGroupRights(group);
+
 		Client client = new Client(UUID.randomUUID());
 		client.setGroup(group);
 		return client;
@@ -61,6 +72,9 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	public void saveClient(Client client) {
 		Client loaded = clientDao.get(client.getUuid());
 		boolean newClient = null == loaded;
+
+		Group group = groupService.getGroup(client.getGroup().getUuid());
+		checkGroupRights(group);
 
 		clientDao.save(client);
 
@@ -97,7 +111,22 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 		if (null == group) {
 			return null;
 		}
+
+		checkGroupRights(group);
+
+
 		return clientDao.list(group);
+	}
+
+	private void checkGroupRights(Group group) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String securityRole = group.getRole();
+		if (StringUtils.isNotBlank(securityRole)) {
+			accessDecisionManager.decide(authentication, null,
+					Arrays.asList(new ConfigAttribute[] {new SecurityConfig("ROLE_ADMIN"),
+							new SecurityConfig(securityRole)}));
+		}
 	}
 
 	/**
@@ -122,5 +151,13 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	public void setApplicationEventPublisher(
 			ApplicationEventPublisher applicationEventPublisher) {
 		this.eventPublisher = applicationEventPublisher;
+	}
+	/**
+	 * @param accessDecisionManager the accessDecisionManager to set
+	 */
+	@Autowired
+	public void setAccessDecisionManager(
+			AccessDecisionManager accessDecisionManager) {
+		this.accessDecisionManager = accessDecisionManager;
 	}
 }

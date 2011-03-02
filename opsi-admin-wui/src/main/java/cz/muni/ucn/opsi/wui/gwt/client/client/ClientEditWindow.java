@@ -21,6 +21,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
@@ -38,9 +39,14 @@ import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
  */
 public class ClientEditWindow extends Window {
 
+	/**
+	 *
+	 */
+	private static final String NAME_REGEXP = "^([a-zA-Z0-9\\-\\_]+)\\.([a-zA-Z0-9\\-\\_\\.]+)$";
+
 	private static final String FIELD_SPEC = "-18";
 
-	private final boolean newGroup;
+	private final boolean newClient;
 	private ClientConstants clientConstants;
 	private FormPanel form;
 
@@ -49,10 +55,10 @@ public class ClientEditWindow extends Window {
 	private ClientJSO group;
 
 	/**
-	 * @param newGroup
+	 * @param newClient
 	 */
-	public ClientEditWindow(boolean newGroup) {
-		this.newGroup = newGroup;
+	public ClientEditWindow(boolean newClient) {
+		this.newClient = newClient;
 
 		clientConstants = GWT.create(ClientConstants.class);
 
@@ -100,6 +106,21 @@ public class ClientEditWindow extends Window {
 		name.setMinLength(1);
 		name.setAllowBlank(false);
 		name.setAutoValidate(true);
+		name.setValidator(new Validator() {
+
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (!value.matches(NAME_REGEXP)) {
+					return "Pole nevyhovuje formátu: " + NAME_REGEXP;
+				}
+				return null;
+			}
+		});
+
+		if (!newClient) {
+			name.setReadOnly(true);
+		}
+
 		formPanel.add(name, new FormData(FIELD_SPEC));
 
 		TextField<String> description = new TextField<String>();
@@ -199,7 +220,7 @@ public class ClientEditWindow extends Window {
 	 *
 	 */
 	private void updateHeading() {
-		if (newGroup) {
+		if (newClient) {
 			setHeading("Nová skupina");
 		} else {
 			setHeading("Úprava skupiny: " + group.getName());

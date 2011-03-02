@@ -18,12 +18,17 @@
     <security:intercept-url pattern="/viewer/desktop.css" filters="none" />
     <security:intercept-url pattern="/applications/**" filters="none" />
     <security:intercept-url pattern="/services/httpRemoteAuthenticationManager" filters="none" />
-    <security:intercept-url pattern="/**" access="ROLE_USER" />
     <security:intercept-url pattern="/remote/**" access="ROLE_USER" />
 -->
+    <security:intercept-url pattern="/login.jsp" filters="none" />
+    <security:intercept-url pattern="/images/**" filters="none" />
+    <security:intercept-url pattern="/gxt/**" filters="none" />
+    <security:intercept-url pattern="/cz.muni.ucn.opsi.wui.gwtLogin.LoginApp/**" filters="none" />
+    <security:intercept-url pattern="/remote/loginStatus" filters="none" />
+    <security:intercept-url pattern="/**" access="ROLE_USER" />
 <!--     <security:intercept-url pattern="/**" access="ROLE_USER,ROLE_ANONYMOUS" /> -->
 <!--    <security:form-login login-page="/login.do" default-target-url="/" authentication-failure-url="/login.do?login_error"/>-->
-    <security:form-login login-page="/login.do"
+    <security:form-login login-page="/login.jsp"
     	authentication-failure-handler-ref="authenticationHandler"
     	authentication-success-handler-ref="authenticationHandler"/>
     <security:anonymous  />
@@ -42,7 +47,7 @@
   	<security:authentication-provider ref="ldapAuthProvider"/>
   </security:authentication-manager>
 
-  <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+  <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
 	<property name="allowIfAllAbstainDecisions" value="true" />
 	<property name="decisionVoters">
 		<list>

@@ -16,7 +16,6 @@ import com.google.gwt.core.client.EntryPoint;
 import cz.muni.ucn.opsi.wui.gwt.client.client.ClientController;
 import cz.muni.ucn.opsi.wui.gwt.client.event.CometController;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupController;
-import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
 
 public class OpsiAdminApp implements EntryPoint {
 
@@ -27,14 +26,14 @@ public class OpsiAdminApp implements EntryPoint {
 //		GXT.setDefaultTheme(Theme.GRAY, true);
 
 		Dispatcher dispatcher = Dispatcher.get();
-		dispatcher.addController(new LoginController());
+//		dispatcher.addController(new LoginController());
 		dispatcher.addController(new DesktopController());
 		dispatcher.addController(new CometController());
 
 		dispatcher.addController(new GroupController());
 		dispatcher.addController(new ClientController());
 
-		dispatcher.dispatch(LoginController.LOGIN);
+		dispatcher.dispatch(DesktopController.INIT);
 
 		GXT.hideLoadingPanel("loading");
 	}

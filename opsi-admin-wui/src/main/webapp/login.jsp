@@ -102,7 +102,7 @@ pageContext.setAttribute("currentVersion", sb.toString());
     </div>
 </div>
 
-<script language='javascript' src='cz.muni.ucn.opsi.wui.gwt.OpsiAdminApp/cz.muni.ucn.opsi.wui.gwt.OpsiAdminApp.nocache.js'></script>
+<script language='javascript' src='cz.muni.ucn.opsi.wui.gwtLogin.LoginApp/cz.muni.ucn.opsi.wui.gwtLogin.LoginApp.nocache.js'></script>
 <iframe src="javascript:''" id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
 <div id="x-desktop">
 <img src="images/u2_banner.png" style="float:right;margin-top: 30px; margin-right: 30px;"/>

@@ -6,6 +6,7 @@ package cz.muni.ucn.opsi.wui.gwt.client.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.extjs.gxt.ui.client.GXT;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.SortDir;
 import com.extjs.gxt.ui.client.data.BeanModel;
@@ -28,6 +29,7 @@ import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
@@ -70,6 +72,7 @@ public class ClientWindow extends Window {
 	private ListStore<BeanModel> groupsStore;
 	private Grid<BeanModel> groupGrid;
 	private BeanModel selectedGroupItem;
+	private Button buttonInstall;
 
 	/**
 	 *
@@ -231,27 +234,33 @@ public class ClientWindow extends Window {
 
 		ColumnConfig name = new ColumnConfig("name", clientConstants.getName(), 180);
 		ColumnConfig description = new ColumnConfig("description", clientConstants.getDescription(), 180);
-		ColumnConfig ipAddress = new ColumnConfig("ipAddress", clientConstants.getIpAddress(), 80);
 		ColumnConfig macAddress = new ColumnConfig("macAddress", clientConstants.getMacAddress(), 100);
+		ColumnConfig ipAddress = new ColumnConfig("ipAddress", clientConstants.getIpAddress(), 80);
+
+		final CheckBoxSelectionModel<BeanModel> sm = new CheckBoxSelectionModel<BeanModel>();
 
 		List<ColumnConfig> config = new ArrayList<ColumnConfig>();
 
+		config.add(sm.getColumn());
 		config.add(name);
 		config.add(description);
-		config.add(ipAddress);
 		config.add(macAddress);
+		config.add(ipAddress);
 
 		final ColumnModel cm = new ColumnModel(config);
 
 		clientsGrid = new Grid<BeanModel>(clientStore, cm);
 		clientsGrid.setBorders(true);
 		clientsGrid.setColumnReordering(true);
+		clientsGrid.setSelectionModel(sm);
+		clientsGrid.addPlugin(sm);
 
 		SelectionChangedListener<BeanModel> selectionListener = new SelectionChangedListener<BeanModel>() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent<BeanModel> se) {
-				if (se.getSelection().size() != 1) {
+				int selectionSize = se.getSelection().size();
+				if (selectionSize != 1) {
 					buttonEdit.disable();
 					buttonRemove.disable();
 					contextMenuEdit.disable();
@@ -261,6 +270,11 @@ public class ClientWindow extends Window {
 					buttonRemove.enable();
 					contextMenuEdit.enable();
 					contextMenuRemove.enable();
+				}
+				if (selectionSize >= 1) {
+					buttonInstall.enable();
+				} else {
+					buttonInstall.disable();
 				}
 			}
 		};
@@ -303,6 +317,7 @@ public class ClientWindow extends Window {
 		}
 
 		ClientService clientService = ClientService.getInstance();
+		clientsGrid.mask(GXT.MESSAGES.loadMask_msg());
 
 		GroupJSO group = selectedItem.getBean();
 		clientService.listClients(group, new RemoteRequestCallback<List<ClientJSO>>() {
@@ -311,11 +326,13 @@ public class ClientWindow extends Window {
 				List<BeanModel> clientModels = clientFactory.createModel(clients);
 				clientStore.removeAll();
 				clientStore.add(clientModels);
+				clientsGrid.unmask();
 			}
 
 			@Override
 			public void onRequestFailed(Throwable th) {
 				Info.display("Chyba při získávání seznamu skupin: ", th.getMessage());
+				clientsGrid.unmask();
 			}
 		});
 	}
@@ -354,7 +371,40 @@ public class ClientWindow extends Window {
 		buttonRemove.addSelectionListener(buttonListener);
 		buttonRemove.disable();
 		toolbar.add(buttonRemove);
+
+		buttonInstall = new Button(clientConstants.getClientInstall());
+		buttonInstall.setIcon(IconHelper.createStyle("install"));
+		buttonInstall.disable();
+		buttonInstall.setMenu(createInstallMenu());
+		toolbar.add(buttonInstall);
+
+
 		return toolbar;
+	}
+
+	/**
+	 * @return
+	 */
+	private Menu createInstallMenu() {
+		final Menu installMenu = new Menu();
+
+		ClientService service = ClientService.getInstance();
+		service.listInstalations(new RemoteRequestCallback<List<InstalaceJSO>>() {
+
+			@Override
+			public void onRequestSuccess(List<InstalaceJSO> v) {
+				for (InstalaceJSO in : v) {
+					MenuItem mi = new MenuItem(in.getName());
+					installMenu.add(mi);
+				}
+			}
+
+			@Override
+			public void onRequestFailed(Throwable th) {
+			}
+		});
+
+		return installMenu;
 	}
 
 	/**
@@ -365,19 +415,19 @@ public class ClientWindow extends Window {
 
 		Menu menu = new Menu();
 
-		contextMenuNew = new MenuItem(groupConstants.getGroupNew());
+		contextMenuNew = new MenuItem(clientConstants.getClientNew());
 		contextMenuNew.setIcon(IconHelper.createStyle("add"));
 		contextMenuNew.setData("event", ClientController.CLIENT_NEW);
 		contextMenuNew.addSelectionListener(buttonListener);
 		menu.add(contextMenuNew);
 
-		contextMenuEdit = new MenuItem(groupConstants.getGroupEdit());
+		contextMenuEdit = new MenuItem(clientConstants.getClientEdit());
 		contextMenuEdit.setIcon(IconHelper.createStyle("edit"));
 		contextMenuEdit.setData("event", ClientController.CLIENT_EDIT);
 		contextMenuEdit.addSelectionListener(buttonListener);
 		menu.add(contextMenuEdit);
 
-		contextMenuRemove = new MenuItem(groupConstants.getGroupDelete());
+		contextMenuRemove = new MenuItem(clientConstants.getClientDelete());
 		contextMenuRemove.setIcon(IconHelper.createStyle("remove"));
 		contextMenuRemove.setData("event", ClientController.CLIENT_DELETE);
 		contextMenuRemove.addSelectionListener(buttonListener);

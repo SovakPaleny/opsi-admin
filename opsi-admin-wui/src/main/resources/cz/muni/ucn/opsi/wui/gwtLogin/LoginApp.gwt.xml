@@ -1,0 +1,23 @@
+<module>
+	<inherits name="com.google.gwt.user.User"/>
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<inherits name="com.google.gwt.jsonp.Jsonp"/>
+<!--	<inherits name="net.zschech.gwt.comet.Comet" />-->
+<!--	<inherits name="de.novanic.eventservice.GWTEventService" />-->
+<!--	<inherits name="com.google.gwt.junit.JUnit"/>-->
+
+	<extend-property name="locale" values="cs"/>
+	<set-property-fallback name="locale" value="cs"/>
+
+	<inherits name='com.extjs.gxt.ui.GXT'/>
+	<inherits name='com.extjs.gxt.themes.Themes' />
+
+	<stylesheet src="opsi-admin.css" />
+
+	<entry-point class='cz.muni.ucn.opsi.wui.gwtLogin.client.LoginApp' />
+
+    <generate-with class="cz.muni.ucn.opsi.wui.gwt.rebind.beanModel.BeanModelGenerator">
+        <when-type-assignable class="cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelLookup"/>
+    </generate-with>
+
+</module>

@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.muni.ucn.opsi.wui.gwt.client.login;
+package cz.muni.ucn.opsi.wui.gwtLogin.client.login;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;

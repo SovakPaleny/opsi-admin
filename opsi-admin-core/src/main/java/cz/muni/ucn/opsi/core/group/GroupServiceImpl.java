@@ -3,14 +3,23 @@
  */
 package cz.muni.ucn.opsi.core.group;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cz.muni.ucn.opsi.api.group.Group;
 import cz.muni.ucn.opsi.api.group.GroupService;
@@ -25,7 +34,10 @@ import cz.u2.eis.api.events.data.SecuredLifecycleEvent;
 @Transactional(readOnly=true)
 public class GroupServiceImpl implements GroupService, ApplicationEventPublisherAware{
 
+//	private final Logger logger = LoggerFactory.getLogger(GroupServiceImpl.class);
+
 	private ApplicationEventPublisher eventPublisher;
+	private AccessDecisionManager accessDecisionManager;
 
 	private GroupDao groupDao;
 
@@ -89,7 +101,34 @@ public class GroupServiceImpl implements GroupService, ApplicationEventPublisher
 	@Override
 	@Transactional
 	public List<Group> listGroups() {
-		return groupDao.list();
+		List<Group> list = groupDao.list();
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		try {
+			accessDecisionManager.decide(authentication, null,
+					Arrays.asList(new ConfigAttribute[] {new SecurityConfig("ROLE_ADMIN")}));
+
+			return list;
+		} catch (AccessDeniedException e) {
+		}
+
+		List<Group> retList = new ArrayList<Group>(list.size());
+		for (Group group : list) {
+			String securityRole = group.getRole();
+			if (!StringUtils.hasText(securityRole)) {
+				retList.add(group);
+				continue;
+			}
+			try {
+				accessDecisionManager.decide(authentication, null,
+						Arrays.asList(new ConfigAttribute[] {new SecurityConfig(securityRole)}));
+				retList.add(group);
+			} catch (AccessDeniedException e) {
+			}
+		}
+
+		return retList;
 	}
 
 	/* (non-Javadoc)
@@ -118,4 +157,12 @@ public class GroupServiceImpl implements GroupService, ApplicationEventPublisher
 		this.groupDao = groupDao;
 	}
 
+	/**
+	 * @param accessDecisionManager the accessDecisionManager to set
+	 */
+	@Autowired
+	public void setAccessDecisionManager(
+			AccessDecisionManager accessDecisionManager) {
+		this.accessDecisionManager = accessDecisionManager;
+	}
 }

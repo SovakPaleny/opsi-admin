@@ -3,9 +3,6 @@
  */
 package cz.muni.ucn.opsi.wui.gwt.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.extjs.gxt.desktop.client.Desktop;
 import com.extjs.gxt.desktop.client.Shortcut;
 import com.extjs.gxt.desktop.client.StartMenu;
@@ -21,11 +18,9 @@ import com.extjs.gxt.ui.client.util.IconHelper;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
-import com.google.gwt.json.client.JSONObject;
 
 import cz.muni.ucn.opsi.wui.gwt.client.client.ClientController;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupController;
-import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
 
 /**
  * @author Jan Dosoudil
@@ -37,6 +32,7 @@ public class DesktopController extends Controller {
 
 	public static final EventType WINDOW_CREATED = new EventType();
 	public static final EventType WINDOW_DESTROYED = new EventType();
+	public static final EventType INIT = new EventType();
 
 	private boolean first = true;
 
@@ -44,10 +40,11 @@ public class DesktopController extends Controller {
 	 *
 	 */
 	public DesktopController() {
-		registerEventTypes(LoginController.LOGIN_OK);
-		registerEventTypes(LoginController.LOGGED_OUT);
+//		registerEventTypes(LoginController.LOGIN_OK);
+//		registerEventTypes(LoginController.LOGGED_OUT);
 		registerEventTypes(DesktopController.WINDOW_CREATED);
 		registerEventTypes(DesktopController.WINDOW_DESTROYED);
+		registerEventTypes(DesktopController.INIT);
 	}
 
 	/*
@@ -60,10 +57,11 @@ public class DesktopController extends Controller {
 	@Override
 	public void handleEvent(AppEvent event) {
 		EventType type = event.getType();
-		if (LoginController.LOGIN_OK == type) {
+		if (DesktopController.INIT == type) {
 			showDesktop();
-			JSONObject object = event.getData();
-			desktop.getStartMenu().setHeading(object.get("displayName").isString().stringValue());
+//			JSONObject object = event.getData();
+//			desktop.getStartMenu().setHeading(object.get("displayName").isString().stringValue());
+/*
 		} else if (LoginController.LOGGED_OUT == type) {
 
 			List<Window> windows = desktop.getWindows();
@@ -83,6 +81,7 @@ public class DesktopController extends Controller {
 
 			Info.display("Odhlášení", "Odhlášení proběhlo úspěšně");
 			Dispatcher.forwardEvent(LoginController.LOGIN);
+		 */
 		} else if (DesktopController.WINDOW_CREATED == type) {
 			Window w = event.getData();
 			if (!desktop.getWindows().contains(w)) {
@@ -208,7 +207,7 @@ public class DesktopController extends Controller {
 		tool.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent ce) {
-				Dispatcher.forwardEvent(LoginController.LOGOUT);
+//				Dispatcher.forwardEvent(LoginController.LOGOUT);
 			}
 		});
 		menu.addTool(tool);

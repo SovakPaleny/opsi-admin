@@ -110,7 +110,6 @@ public class ClientHibernate extends HibernateValueObject {
 	 * @return the group
 	 */
 	@ManyToOne
-	@NaturalId
 	@NotNull
 	public GroupHibernate getGroup() {
 		return group;

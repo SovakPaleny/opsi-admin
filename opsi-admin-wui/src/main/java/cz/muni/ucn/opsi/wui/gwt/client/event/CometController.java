@@ -9,7 +9,7 @@ import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.google.gwt.core.client.GWT;
 
-import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
+import cz.muni.ucn.opsi.wui.gwt.client.DesktopController;
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
@@ -31,8 +31,8 @@ public class CometController extends Controller implements RemoteEventListener {
 	 *
 	 */
 	public CometController() {
-		registerEventTypes(LoginController.LOGIN_OK);
-		registerEventTypes(LoginController.LOGGED_OUT);
+		registerEventTypes(DesktopController.INIT);
+//		registerEventTypes(LoginController.LOGGED_OUT);
 		registerEventTypes(CometController.LIFECYCLE_EVENT_TYPE);
 	}
 
@@ -42,10 +42,10 @@ public class CometController extends Controller implements RemoteEventListener {
 	@Override
 	public void handleEvent(AppEvent event) {
 		EventType type = event.getType();
-		if (LoginController.LOGIN_OK == type) {
+		if (DesktopController.INIT == type) {
 			startCommet();
-		} else if (LoginController.LOGGED_OUT == type) {
-			stopCommet();
+//		} else if (LoginController.LOGGED_OUT == type) {
+//			stopCommet();
 		}
 	}
 

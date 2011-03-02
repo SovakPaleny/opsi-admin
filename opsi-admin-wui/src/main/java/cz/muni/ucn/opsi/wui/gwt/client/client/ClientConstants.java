@@ -24,4 +24,6 @@ public interface ClientConstants extends Constants {
 	String getClientEdit();
 	@Key("client.clientDelete")
 	String getClientDelete();
+	@Key("client.clientInstall")
+	String getClientInstall();
 }

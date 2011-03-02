@@ -3,12 +3,12 @@
  */
 package cz.muni.ucn.opsi.core.client;
 
-import java.io.Serializable;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import cz.muni.ucn.opsi.api.client.Client;
+import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
 import cz.u2.eis.api.events.data.LifecycleEvent;
 
 /**
@@ -17,6 +17,8 @@ import cz.u2.eis.api.events.data.LifecycleEvent;
  */
 @Component
 public class OpsiSynchronizer implements ApplicationListener<LifecycleEvent> {
+
+	private OpsiClientService clientService;
 
 	/* (non-Javadoc)
 	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
@@ -38,8 +40,15 @@ public class OpsiSynchronizer implements ApplicationListener<LifecycleEvent> {
 	 * @param client
 	 */
 	protected void createClient(Client client) {
-
+		clientService.createClient(client);
 	}
 
 
+	/**
+	 * @param clientService the clientService to set
+	 */
+	@Autowired
+	public void setClientService(OpsiClientService clientService) {
+		this.clientService = clientService;
+	}
 }

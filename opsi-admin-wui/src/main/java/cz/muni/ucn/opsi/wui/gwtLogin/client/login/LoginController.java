@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.muni.ucn.opsi.wui.gwt.client.login;
+package cz.muni.ucn.opsi.wui.gwtLogin.client.login;
 
 import com.extjs.gxt.ui.client.event.EventType;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
@@ -10,6 +10,7 @@ import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.Window;
 
 /**
  * @author Jan Dosoudil
@@ -107,7 +108,7 @@ public class LoginController extends Controller {
 	 *
 	 */
 	protected void onLoginOkEvent(AppEvent event) {
-
+		Window.Location.assign("index.html");
 	}
 
 

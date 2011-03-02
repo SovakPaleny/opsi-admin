@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.muni.ucn.opsi.wui.gwt.client.login;
+package cz.muni.ucn.opsi.wui.gwtLogin.client.login;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
