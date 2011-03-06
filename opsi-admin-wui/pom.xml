@@ -48,7 +48,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
 <!--				<version>2.1-20101001.MGWT219</version> -->
-				<version>2.1.0</version>
+				<version>2.1.0-1</version>
 				<configuration>
 <!--					<runTarget>cz.u2.eis.business.wui.gwt.DesktopApp/index.html</runTarget>-->
 					<runTarget>index.jsp</runTarget>

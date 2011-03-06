@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import cz.muni.ucn.opsi.api.client.Client;
+import cz.muni.ucn.opsi.api.instalation.Instalation;
 import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
 
 /**
@@ -42,11 +43,12 @@ import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
  *
  */
 @Service
-public class OpsiClisentServiceImpl implements OpsiClientService, InitializingBean {
+public class OpsiClientServiceImpl implements OpsiClientService, InitializingBean {
 
 	private static final String OPSI_SCHEMA = "https";
 	private static final String OPSI_SERVER = "opsi.ucn.muni.cz";
 	private static final int OPSI_PORT = 4447;
+	private static final String OPSI_URL = OPSI_SCHEMA + "://" + OPSI_SERVER + ":" + OPSI_PORT + "/rpc";
 
 	private static RestTemplate template;
 
@@ -122,7 +124,6 @@ public class OpsiClisentServiceImpl implements OpsiClientService, InitializingBe
 	@Override
 	public void createClient(Client client) {
 
-		String url = OPSI_SCHEMA + "://" + OPSI_SERVER + ":" + OPSI_PORT + "/rpc";
 		OpsiRequest request = new OpsiRequest();
 		String name = client.getName();
 		int indexOf = name.indexOf(".");
@@ -140,7 +141,7 @@ public class OpsiClisentServiceImpl implements OpsiClientService, InitializingBe
 
 		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
 		ResponseEntity<OpsiResponse> responseEntity = template.exchange(
-				url, HttpMethod.POST, requestEntity, OpsiResponse.class);
+				OPSI_URL, HttpMethod.POST, requestEntity, OpsiResponse.class);
 
 		OpsiResponse response = responseEntity.getBody();
 
@@ -148,6 +149,33 @@ public class OpsiClisentServiceImpl implements OpsiClientService, InitializingBe
 
 		response.toString();
 
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#listInstalations()
+	 */
+	@Override
+	public List<Instalation> listInstalations() {
+		OpsiRequest request = new OpsiRequest();
+		request.setParams(Arrays.asList(new Object[] {null, null}));
+		request.setId(2);
+		request.setMethod("getNetBootProductIds_list");
+
+		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
+		ResponseEntity<OpsiResponse> responseEntity = template.exchange(
+				OPSI_URL, HttpMethod.POST, requestEntity, OpsiResponse.class);
+
+		OpsiResponse response = responseEntity.getBody();
+		@SuppressWarnings("unchecked")
+		List<Object> res = (List<Object>) response.getResult();
+		List<Instalation> ret = new ArrayList<Instalation>();
+		for (Object o : res) {
+			Instalation inst = new Instalation();
+			inst.setId((String) o);
+			inst.setName((String) o);
+			ret.add(inst);
+		}
+		return ret;
 	}
 
 	/* (non-Javadoc)

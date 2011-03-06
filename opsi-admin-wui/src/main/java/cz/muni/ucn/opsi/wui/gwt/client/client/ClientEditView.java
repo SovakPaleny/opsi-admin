@@ -4,8 +4,10 @@
 package cz.muni.ucn.opsi.wui.gwt.client.client;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.event.EventType;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
@@ -44,8 +46,11 @@ public class ClientEditView extends View {
 		if (ClientController.CLIENT_NEW == type) {
 			clientEdit(group, null);
 		} else if (ClientController.CLIENT_EDIT == type) {
-			ClientJSO client = (ClientJSO) event.getData("client");
-			clientEdit(group, client);
+			List<BeanModel> clients = event.getData("clients");
+			for (BeanModel beanModel : clients) {
+				ClientJSO client = beanModel.getBean();
+				clientEdit(group, client);
+			}
 		}
 	}
 

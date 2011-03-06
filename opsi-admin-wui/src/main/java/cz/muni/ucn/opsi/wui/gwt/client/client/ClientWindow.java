@@ -183,6 +183,7 @@ public class ClientWindow extends Window {
 					buttonNew.disable();
 					buttonEdit.disable();
 					buttonRemove.disable();
+					buttonInstall.disable();
 					contextMenuNew.disable();
 					contextMenuEdit.disable();
 					contextMenuRemove.disable();
@@ -191,6 +192,7 @@ public class ClientWindow extends Window {
 					buttonNew.enable();
 					buttonEdit.enable();
 					buttonRemove.enable();
+					buttonInstall.enable();
 					contextMenuNew.enable();
 					contextMenuEdit.enable();
 					contextMenuRemove.enable();
@@ -262,19 +264,19 @@ public class ClientWindow extends Window {
 				int selectionSize = se.getSelection().size();
 				if (selectionSize != 1) {
 					buttonEdit.disable();
-					buttonRemove.disable();
 					contextMenuEdit.disable();
-					contextMenuRemove.disable();
 				} else {
 					buttonEdit.enable();
-					buttonRemove.enable();
 					contextMenuEdit.enable();
-					contextMenuRemove.enable();
 				}
 				if (selectionSize >= 1) {
 					buttonInstall.enable();
+					buttonRemove.enable();
+					contextMenuRemove.enable();
 				} else {
 					buttonInstall.disable();
+					buttonRemove.disable();
+					contextMenuRemove.disable();
 				}
 			}
 		};
@@ -296,8 +298,8 @@ public class ClientWindow extends Window {
 			public void handleEvent(GridEvent<BeanModel> be) {
 
 				EventType type = ClientController.CLIENT_EDIT;
-				ClientJSO group = be.getModel().getBean();
-				Dispatcher.forwardEvent(type, group);
+				ClientJSO client = be.getModel().getBean();
+				Dispatcher.forwardEvent(type, client);
 			}
 
 		});
@@ -483,18 +485,27 @@ public class ClientWindow extends Window {
 	private final class ToolbarButtonListener extends SelectionListener<ButtonEvent> {
 		@Override
 		public void componentSelected(ButtonEvent ce) {
+
 			EventType type = ce.getButton().getData("event");
-			ClientJSO client;
+			List<BeanModel> clients;
 			if (ClientController.CLIENT_NEW == type) {
-				client = null;
+				clients = null;
 			} else {
-				client = clientsGrid.getSelectionModel().getSelectedItem().getBean();
+				clients = clientsGrid.getSelectionModel().getSelectedItems();
+			}
+			if (null == clients) {
+				AppEvent event = new AppEvent(type);
+//				event.setData("client", null);
+				event.setData("group", getSelectedGroupItem().getBean());
+				Dispatcher.forwardEvent(event);
+			} else {
+				AppEvent event = new AppEvent(type);
+				event.setData("clients", clients);
+				event.setData("group", getSelectedGroupItem().getBean());
+				Dispatcher.forwardEvent(event);
+
 			}
 
-			AppEvent event = new AppEvent(type);
-			event.setData("client", client);
-			event.setData("group", getSelectedGroupItem().getBean());
-			Dispatcher.forwardEvent(event);
 		}
 	}
 

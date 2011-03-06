@@ -266,7 +266,6 @@
 		<hibernate-validator.version>4.1.0.Final</hibernate-validator.version>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
-		<gwt.soycReport.skip>true></gwt.soycReport.skip>
 	</properties>
 
 </project>

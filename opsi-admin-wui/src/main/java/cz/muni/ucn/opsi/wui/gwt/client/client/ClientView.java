@@ -3,6 +3,9 @@
  */
 package cz.muni.ucn.opsi.wui.gwt.client.client;
 
+import java.util.List;
+
+import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.event.EventType;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
@@ -45,8 +48,8 @@ public class ClientView extends View {
 		if (ClientController.CLIENTS == type) {
 			showClients();
 		} else if (ClientController.CLIENT_DELETE == type) {
-			ClientJSO client = event.getData("client");
-			groupDelete(client);
+			List<BeanModel> clients = event.getData("clients");
+			groupClients(clients);
 		} else if (CometController.LIFECYCLE_EVENT_TYPE == type) {
 			LifecycleEventJSO lifecycleEventJSO = (LifecycleEventJSO)event.getData();
 			onLifecycleEvent(lifecycleEventJSO);
@@ -84,9 +87,17 @@ public class ClientView extends View {
 	/**
 	 *
 	 */
-	private void groupDelete(final ClientJSO client) {
+	private void groupClients(final List<BeanModel> clients) {
+		String clientsStr = "";
+		for (BeanModel beanModel : clients) {
+			ClientJSO c = beanModel.getBean();
+			if (!clientsStr.isEmpty()) {
+				clientsStr += ", ";
+			}
+			clientsStr += c.getName();
+		}
 		MessageBox.confirm("Odstranit klienta?",
-				"Opravdu chcete klienta " + client.getName() + " odstranit? ",
+				"Opravdu chcete klienty odstranit? <br />" + clientsStr,
 				new Listener<MessageBoxEvent>() {
 
 			@Override
@@ -94,17 +105,21 @@ public class ClientView extends View {
 				if (!Dialog.YES.equals(be.getButtonClicked().getItemId())) {
 					return;
 				}
-				ClientService.getInstance().deleteClient(client, new RemoteRequestCallback<Object>() {
-					@Override
-					public void onRequestSuccess(Object v) {
-						Info.display("Klient odstraněn", "");
-					}
 
-					@Override
-					public void onRequestFailed(Throwable th) {
-						Info.display("Chyba při ostraňování klienta", th.getMessage());
-					}
-				});
+				for (BeanModel beanModel : clients) {
+					ClientJSO client = beanModel.getBean();
+					ClientService.getInstance().deleteClient(client, new RemoteRequestCallback<Object>() {
+						@Override
+						public void onRequestSuccess(Object v) {
+							Info.display("Klient odstraněn", "");
+						}
+
+						@Override
+						public void onRequestFailed(Throwable th) {
+							Info.display("Chyba při ostraňování klienta", th.getMessage());
+						}
+					});
+				}
 			}
 		});
 

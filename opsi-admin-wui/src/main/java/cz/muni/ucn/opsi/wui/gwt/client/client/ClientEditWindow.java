@@ -131,11 +131,45 @@ public class ClientEditWindow extends Window {
 		TextField<String> ipAddress = new TextField<String>();
 		ipAddress.setName("ipAddress");
 		ipAddress.setFieldLabel(clientConstants.getIpAddress());
+		ipAddress.setValidator(new Validator() {
+
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (value.isEmpty()) {
+					return null;
+				}
+				String[] split = value.split("\\.");
+				if (split.length == 4) {
+					int errs = 0;
+					for (int i = 0; i < split.length; i++) {
+						int p = Integer.parseInt(split[i]);
+						if (p >= 0 && p <= 255) {
+							continue;
+						}
+						errs++;
+					}
+					if (0 == errs) {
+						return null;
+					}
+				}
+				return "Vyplňte platnou IPv4 adresu.";
+			}
+		});
 		formPanel.add(ipAddress, new FormData(FIELD_SPEC));
 
 		TextField<String> macAddress = new TextField<String>();
 		macAddress.setName("macAddress");
 		macAddress.setFieldLabel(clientConstants.getMacAddress());
+		macAddress.setValidator(new Validator() {
+
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (value.matches("^([0-9a-fA-F]{1,2}:){5}([0-9a-fA-F]{1,2})$")) {
+					return null;
+				}
+				return "Zadejte platnou MAC adresu ve tvaru 01:23:45:67:89:ab";
+			}
+		});
 		formPanel.add(macAddress, new FormData(FIELD_SPEC));
 
 
