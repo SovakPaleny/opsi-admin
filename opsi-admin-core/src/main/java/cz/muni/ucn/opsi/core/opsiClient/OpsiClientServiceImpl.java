@@ -26,6 +26,7 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -43,17 +44,23 @@ import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
  * @author Jan Dosoudil
  *
  */
-@Service
+//@Service
 public class OpsiClientServiceImpl implements OpsiClientService, InitializingBean {
+//
+//	private static final String OPSI_SCHEMA = "https";
+//	private static final String OPSI_SERVER = "opsi.ucn.muni.cz";
+//	private static final int OPSI_PORT = 4447;
+//	private static final String OPSI_URL = OPSI_SCHEMA + "://" + OPSI_SERVER + ":" + OPSI_PORT + "/rpc";
 
-	private static final String OPSI_SCHEMA = "https";
-	private static final String OPSI_SERVER = "opsi.ucn.muni.cz";
-	private static final int OPSI_PORT = 4447;
-	private static final String OPSI_URL = OPSI_SCHEMA + "://" + OPSI_SERVER + ":" + OPSI_PORT + "/rpc";
+	private RestTemplate template;
 
-	private static RestTemplate template;
+	private URL opsiUrl;
+	private String userName;
+	private String password;
 
-	public static void init() {
+	public void init() {
+
+
 
 		try {
 			new URL("https://0.0.0.0/").getContent();
@@ -104,8 +111,14 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		Protocol.registerProtocol("https", easyhttps);
 
 		HttpClient httpClient = new HttpClient();
-		Credentials credentials = new UsernamePasswordCredentials("opsiuser", "Kaka0.Pramen");
-		httpClient.getState().setCredentials(new AuthScope(OPSI_SERVER, OPSI_PORT), credentials);
+		userName = "opsiuser";
+		password = "Kaka0.Pramen";
+		Credentials credentials = new UsernamePasswordCredentials(userName, password);
+		int port = opsiUrl.getPort();
+		if (-1 == port) {
+			port = "https".equalsIgnoreCase(opsiUrl.getProtocol()) ? 443 : 80;
+		}
+		httpClient.getState().setCredentials(new AuthScope(opsiUrl.getHost(), port), credentials);
 
 		CommonsClientHttpRequestFactory requestFactory = new CommonsClientHttpRequestFactory(httpClient);
 
@@ -113,7 +126,6 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 		messageConverters.add(new MappingJacksonHttpMessageConverter());
 		template.setMessageConverters(messageConverters);
-
 
 	}
 
@@ -142,7 +154,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
 		ResponseEntity<OpsiResponse> responseEntity = template.exchange(
-				OPSI_URL, HttpMethod.POST, requestEntity, OpsiResponse.class);
+				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
 
 		OpsiResponse response = responseEntity.getBody();
 
@@ -164,7 +176,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
 		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
 
 		OpsiResponse responseProds = responseProdsEntity.getBody();
 
@@ -192,7 +204,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
 		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
 
 		OpsiResponse responseProds = responseProdsEntity.getBody();
 
@@ -208,7 +220,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
 		ResponseEntity<OpsiResponse> responseEntity = template.exchange(
-				OPSI_URL, HttpMethod.POST, requestEntity, OpsiResponse.class);
+				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
 
 		OpsiResponse response = responseEntity.getBody();
 		@SuppressWarnings("unchecked")
@@ -241,7 +253,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
 		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
 
 		OpsiResponse responseProds = responseProdsEntity.getBody();
 
@@ -268,7 +280,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
 		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
 
 		OpsiResponse responseProds = responseProdsEntity.getBody();
 
@@ -280,6 +292,30 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		init();
+	}
+
+	/**
+	 * @param opsiUrl the opsiUrl to set
+	 */
+	@Required
+	public void setOpsiUrl(URL opsiUrl) {
+		this.opsiUrl = opsiUrl;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	@Required
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	@Required
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public static class OpsiRequest {

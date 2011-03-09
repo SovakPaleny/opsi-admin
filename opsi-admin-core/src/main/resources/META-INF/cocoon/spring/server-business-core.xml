@@ -12,6 +12,12 @@
 
 	<context:component-scan base-package="cz.muni.ucn.opsi.core" />
 
+	<bean id="opsiClientService" class="cz.muni.ucn.opsi.core.opsiClient.OpsiClientServiceImpl">
+		<property name="opsiUrl" value="${opsi.rpc.url}"/>
+		<property name="userName" value="${opsi.user}"/>
+		<property name="password" value="${opsi.password}"/>
+	</bean>
+
 <!--
 	<bean id="businessMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean">
 		<qualifier value="business" />
@@ -35,4 +41,6 @@
 		</property>
 	</bean>
  -->
+
+
 </beans>
