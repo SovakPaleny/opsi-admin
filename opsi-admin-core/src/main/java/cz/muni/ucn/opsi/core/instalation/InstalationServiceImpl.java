@@ -21,6 +21,14 @@ public class InstalationServiceImpl implements InstalationService {
 
 	private OpsiClientService opsiClientService;
 
+	/**
+	 * @param opsiClientService the opsiClientService to set
+	 */
+	@Autowired
+	public void setOpsiClientService(OpsiClientService opsiClientService) {
+		this.opsiClientService = opsiClientService;
+	}
+
 	/* (non-Javadoc)
 	 * @see cz.muni.ucn.opsi.api.instalation.InstalationService#listInstalations()
 	 */
@@ -29,12 +37,12 @@ public class InstalationServiceImpl implements InstalationService {
 		return opsiClientService.listInstalations();
 	}
 
-	/**
-	 * @param opsiClientService the opsiClientService to set
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.instalation.InstalationService#getInstalationById(java.lang.String)
 	 */
-	@Autowired
-	public void setOpsiClientService(OpsiClientService opsiClientService) {
-		this.opsiClientService = opsiClientService;
+	@Override
+	public Instalation getInstalationById(String instalationId) {
+		return opsiClientService.getIntalationById(instalationId);
 	}
 
 }

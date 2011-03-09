@@ -10,6 +10,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -152,13 +153,57 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	}
 
 	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#deleteClient(cz.muni.ucn.opsi.api.client.Client)
+	 */
+	@Override
+	public void deleteClient(Client client) {
+		OpsiRequest requestProds = new OpsiRequest();
+		requestProds.setParams(Arrays.asList(new Object[] {client.getName()}));
+		requestProds.setId(5);
+		requestProds.setMethod("deleteClient");
+
+		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
+		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+
+		OpsiResponse responseProds = responseProdsEntity.getBody();
+
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#updateClient(cz.muni.ucn.opsi.api.client.Client)
+	 */
+	@Override
+	public void updateClient(Client client) {
+		// TODO Auto-generated method stub
+
+
+	}
+
+	/* (non-Javadoc)
 	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#listInstalations()
 	 */
 	@Override
 	public List<Instalation> listInstalations() {
+		OpsiRequest requestProds = new OpsiRequest();
+		requestProds.setParams(Arrays.asList(new Object[] {}));
+		requestProds.setId(2);
+		requestProds.setMethod("getProducts_hash");
+
+		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
+		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+
+		OpsiResponse responseProds = responseProdsEntity.getBody();
+
+		@SuppressWarnings("unchecked")
+		Map<String, Map<String, Map<String, String>>> depoMap =
+			(Map<String, Map<String, Map<String, String>>>) responseProds.getResult();
+		Map<String, Map<String, String>> prodMap = depoMap.values().iterator().next();
+
 		OpsiRequest request = new OpsiRequest();
 		request.setParams(Arrays.asList(new Object[] {null, null}));
-		request.setId(2);
+		request.setId(3);
 		request.setMethod("getNetBootProductIds_list");
 
 		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
@@ -171,11 +216,62 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		List<Instalation> ret = new ArrayList<Instalation>();
 		for (Object o : res) {
 			Instalation inst = new Instalation();
-			inst.setId((String) o);
-			inst.setName((String) o);
+			String id = (String) o;
+			inst.setId(id);
+			Map<String, String> prod = prodMap.get(id);
+			if (null != prod) {
+				inst.setName(prod.get("name"));
+			} else {
+				inst.setId(id);
+			}
 			ret.add(inst);
 		}
 		return ret;
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#getIntalationById(java.lang.String)
+	 */
+	@Override
+	public Instalation getIntalationById(String instalationId) {
+		OpsiRequest requestProds = new OpsiRequest();
+		requestProds.setParams(Arrays.asList(new Object[] {instalationId}));
+		requestProds.setId(4);
+		requestProds.setMethod("getProduct_hash");
+
+		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
+		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+
+		OpsiResponse responseProds = responseProdsEntity.getBody();
+
+		@SuppressWarnings("unchecked")
+		Map<String, String> produktMap = (Map<String, String>) responseProds.getResult();
+
+		Instalation inst = new Instalation();
+		String id = produktMap.get("productId");
+		inst.setId(id);
+		inst.setName(produktMap.get("name"));
+
+		return inst;
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#clientInstall(cz.muni.ucn.opsi.api.client.Client, cz.muni.ucn.opsi.api.instalation.Instalation)
+	 */
+	@Override
+	public void clientInstall(Client client, Instalation i) {
+		OpsiRequest requestProds = new OpsiRequest();
+		requestProds.setParams(Arrays.asList(new Object[] {i.getId(), client.getName(), "setup"}));
+		requestProds.setId(6);
+		requestProds.setMethod("setProductActionRequest");
+
+		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
+		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+				OPSI_URL, HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
+
+		OpsiResponse responseProds = responseProdsEntity.getBody();
+
 	}
 
 	/* (non-Javadoc)

@@ -63,7 +63,7 @@ public class CometController extends Controller implements RemoteEventListener {
 	/**
 	 *
 	 */
-	private void startCommet() {
+	protected void startCommet() {
 		GWT.log("startCommet");
 		eventService.addListener(lifecycleDomain, this);
 	}
@@ -71,7 +71,7 @@ public class CometController extends Controller implements RemoteEventListener {
 	/**
 	 *
 	 */
-	private void stopCommet() {
+	protected void stopCommet() {
 		GWT.log("stopCommet");
 		eventService.removeListeners();
 	}

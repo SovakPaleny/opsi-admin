@@ -16,4 +16,10 @@ public interface InstalationService {
 	 */
 	List<Instalation> listInstalations();
 
+	/**
+	 * @param instalationId
+	 * @return
+	 */
+	Instalation getInstalationById(String instalationId);
+
 }

@@ -190,12 +190,12 @@ public class ClientWindow extends Window {
 					updateClients(null);
 				} else {
 					buttonNew.enable();
-					buttonEdit.enable();
-					buttonRemove.enable();
-					buttonInstall.enable();
+//					buttonEdit.enable();
+//					buttonRemove.enable();
+//					buttonInstall.enable();
 					contextMenuNew.enable();
-					contextMenuEdit.enable();
-					contextMenuRemove.enable();
+//					contextMenuEdit.enable();
+//					contextMenuRemove.enable();
 					updateClients(se.getSelectedItem());
 				}
 			}
@@ -389,6 +389,7 @@ public class ClientWindow extends Window {
 	 */
 	private Menu createInstallMenu() {
 		final Menu installMenu = new Menu();
+		final SelectionListener<? extends MenuEvent> installListener = new InstalaceMenuListener();
 
 		ClientService service = ClientService.getInstance();
 		service.listInstalations(new RemoteRequestCallback<List<InstalaceJSO>>() {
@@ -397,6 +398,9 @@ public class ClientWindow extends Window {
 			public void onRequestSuccess(List<InstalaceJSO> v) {
 				for (InstalaceJSO in : v) {
 					MenuItem mi = new MenuItem(in.getName());
+					mi.addSelectionListener(installListener);
+					mi.setData("instalace", in);
+					mi.setData("event", ClientController.CLIENT_INSTALL);
 					installMenu.add(mi);
 				}
 			}
@@ -517,15 +521,44 @@ public class ClientWindow extends Window {
 		@Override
 		public void componentSelected(MenuEvent ce) {
 			EventType type = ce.getItem().getData("event");
-			ClientJSO client;
+
+			List<BeanModel> clients;
 			if (ClientController.CLIENT_NEW == type) {
-				client = null;
+				clients = null;
 			} else {
-				client = clientsGrid.getSelectionModel().getSelectedItem().getBean();
+				clients = clientsGrid.getSelectionModel().getSelectedItems();
+			}
+			if (null == clients) {
+				AppEvent event = new AppEvent(type);
+//				event.setData("client", null);
+				event.setData("group", getSelectedGroupItem().getBean());
+				Dispatcher.forwardEvent(event);
+			} else {
+				AppEvent event = new AppEvent(type);
+				event.setData("clients", clients);
+				event.setData("group", getSelectedGroupItem().getBean());
+				Dispatcher.forwardEvent(event);
+
 			}
 
+		}
+	}
+
+
+	/**
+	 * @author Jan Dosoudil
+	 *
+	 */
+	private final class InstalaceMenuListener extends	SelectionListener<MenuEvent> {
+		@Override
+		public void componentSelected(MenuEvent ce) {
+			EventType type = ce.getItem().getData("event");
+			InstalaceJSO instalace = ce.getItem().getData("instalace");
+
+			List<BeanModel> clients = clientsGrid.getSelectionModel().getSelectedItems();
 			AppEvent event = new AppEvent(type);
-			event.setData("client", client);
+			event.setData("clients", clients);
+			event.setData("instalace", instalace);
 			event.setData("group", getSelectedGroupItem().getBean());
 			Dispatcher.forwardEvent(event);
 		}

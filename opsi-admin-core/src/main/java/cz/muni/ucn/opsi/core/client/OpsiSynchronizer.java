@@ -32,6 +32,10 @@ public class OpsiSynchronizer implements ApplicationListener<LifecycleEvent> {
 		Client client = (Client) event.getBean();
 		if (LifecycleEvent.CREATED == event.getEventType()) {
 			createClient(client);
+		} else if (LifecycleEvent.DELETED == event.getEventType()) {
+			deleteClient(client);
+		} else if (LifecycleEvent.MODIFIED == event.getEventType()) {
+			updateClient(client);
 		}
 
 	}
@@ -42,6 +46,21 @@ public class OpsiSynchronizer implements ApplicationListener<LifecycleEvent> {
 	protected void createClient(Client client) {
 		clientService.createClient(client);
 	}
+
+	/**
+	 * @param client
+	 */
+	private void deleteClient(Client client) {
+		clientService.deleteClient(client);
+	}
+
+	/**
+	 * @param client
+	 */
+	private void updateClient(Client client) {
+		clientService.updateClient(client);
+	}
+
 
 
 	/**

@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.muni.ucn.opsi.api.client.Client;
 import cz.muni.ucn.opsi.api.client.ClientService;
+import cz.muni.ucn.opsi.api.instalation.Instalation;
+import cz.muni.ucn.opsi.api.instalation.InstalationService;
 
 /**
  * @author Jan Dosoudil
@@ -30,6 +32,7 @@ import cz.muni.ucn.opsi.api.client.ClientService;
 public class ClientController {
 
 	private ClientService clientService;
+	private InstalationService instalationService;
 	private Validator validator;
 
 	/**
@@ -38,6 +41,13 @@ public class ClientController {
 	@Autowired
 	public void setClientService(ClientService clientService) {
 		this.clientService = clientService;
+	}
+	/**
+	 * @param instalationService the instalationService to set
+	 */
+	@Autowired
+	public void setInstalationService(InstalationService instalationService) {
+		this.instalationService = instalationService;
 	}
 	/**
 	 * @param validator the validator to set
@@ -69,6 +79,15 @@ public class ClientController {
 	@RequestMapping(value = "/clients/delete", method = RequestMethod.DELETE)
 	public @ResponseBody void deleteClient(@RequestBody Client client) {
 		clientService.deleteClient(client);
+	}
+
+	@RequestMapping(value = "/clients/install", method = RequestMethod.PUT)
+	public @ResponseBody void installClient(@RequestBody Client client,
+			@RequestParam String instalaceId) {
+
+		Instalation i = instalationService.getInstalationById(instalaceId);
+
+		clientService.installClient(client, i);
 	}
 
 	@RequestMapping(value = "/clients/list", method = RequestMethod.GET)

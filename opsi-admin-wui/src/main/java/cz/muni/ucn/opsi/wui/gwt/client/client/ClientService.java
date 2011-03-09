@@ -29,6 +29,7 @@ public class ClientService {
 	private static final String CLIENT_EDIT_URL = "remote/clients/edit";
 	private static final String CLIENT_SAVE_URL = "remote/clients/save";
 	private static final String CLIENT_DELETE_URL = "remote/clients/delete";
+	private static final String CLIENT_INSTALL_URL = "remote/clients/install";
 	private static final String CLIENT_INSTALACTION_LIST_URL = "remote/instalation/list";
 
 	private ClientService() {
@@ -169,6 +170,36 @@ public class ClientService {
 				return transformInstalation(text);
 			}
 		};
+
+		request.execute(callback);
+
+	}
+
+	/**
+	 * @param client
+	 * @param instalace
+	 * @param remoteRequestCallback
+	 */
+	public void installClient(ClientJSO client, InstalaceJSO instalace,
+			RemoteRequestCallback<Object> callback) {
+
+		RemoteRequest<Object> request = new RemoteRequest<Object>(RequestBuilder.PUT,
+				URL.encode(GWT.getHostPageBaseURL() + CLIENT_INSTALL_URL +
+						"?instalaceId=" + instalace.getId())) {
+
+			@Override
+			protected Object transformResponse(String text) {
+				return null;
+			}
+		};
+
+		request.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		JSONObject userJson = transform(client);
+
+		String data = userJson.toString();
+		request.setRequestData(data);
+		request.setHeader("Content-Type", "application/json");
 
 		request.execute(callback);
 

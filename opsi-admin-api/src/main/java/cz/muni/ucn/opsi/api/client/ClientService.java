@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.springframework.security.access.annotation.Secured;
 
+import cz.muni.ucn.opsi.api.instalation.Instalation;
+
 /**
  * @author Jan Dosoudil
  *
@@ -45,5 +47,12 @@ public interface ClientService {
 	 */
 	@Secured("ROLE_USER")
 	List<Client> listClients(UUID groupUuid);
+
+	/**
+	 * @param client
+	 * @param i
+	 */
+	@Secured("ROLE_USER")
+	void installClient(Client client, Instalation i);
 
 }

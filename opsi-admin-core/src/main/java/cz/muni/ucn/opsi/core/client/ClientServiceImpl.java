@@ -23,6 +23,8 @@ import cz.muni.ucn.opsi.api.client.Client;
 import cz.muni.ucn.opsi.api.client.ClientService;
 import cz.muni.ucn.opsi.api.group.Group;
 import cz.muni.ucn.opsi.api.group.GroupService;
+import cz.muni.ucn.opsi.api.instalation.Instalation;
+import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
 import cz.u2.eis.api.events.data.LifecycleEvent;
 import cz.u2.eis.api.events.data.SecuredLifecycleEvent;
 
@@ -38,6 +40,7 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	private ClientDao clientDao;
 	private ApplicationEventPublisher eventPublisher;
 	private AccessDecisionManager accessDecisionManager;
+	private OpsiClientService opsiClientService;
 
 	/* (non-Javadoc)
 	 * @see cz.muni.ucn.opsi.api.client.ClientService#createClient(java.util.UUID)
@@ -96,6 +99,9 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	@Override
 	@Transactional(readOnly=false)
 	public void deleteClient(Client client) {
+		Client c = clientDao.get(client.getUuid());
+		checkGroupRights(c.getGroup());
+
 		clientDao.delete(client);
 
 		eventPublisher.publishEvent(new SecuredLifecycleEvent(LifecycleEvent.DELETED, client, "ROLE_USER"));
@@ -118,7 +124,20 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 		return clientDao.list(group);
 	}
 
-	private void checkGroupRights(Group group) {
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.client.ClientService#installClient(cz.muni.ucn.opsi.api.client.Client, cz.muni.ucn.opsi.api.instalation.Instalation)
+	 */
+	@Override
+	public void installClient(Client client, Instalation i) {
+		Client c = clientDao.get(client.getUuid());
+		Group group = c.getGroup();
+
+		checkGroupRights(group);
+
+		opsiClientService.clientInstall(client, i);
+	}
+
+	protected void checkGroupRights(Group group) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		String securityRole = group.getRole();
@@ -159,5 +178,12 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	public void setAccessDecisionManager(
 			AccessDecisionManager accessDecisionManager) {
 		this.accessDecisionManager = accessDecisionManager;
+	}
+	/**
+	 * @param opsiClientService the opsiClientService to set
+	 */
+	@Autowired
+	public void setOpsiClientService(OpsiClientService opsiClientService) {
+		this.opsiClientService = opsiClientService;
 	}
 }

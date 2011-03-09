@@ -24,4 +24,26 @@ public interface OpsiClientService {
 	 */
 	List<Instalation> listInstalations();
 
+	/**
+	 * @param instalationId
+	 * @return
+	 */
+	Instalation getIntalationById(String instalationId);
+
+	/**
+	 * @param client
+	 * @param i
+	 */
+	void clientInstall(Client client, Instalation i);
+
+	/**
+	 * @param client
+	 */
+	void deleteClient(Client client);
+
+	/**
+	 * @param client
+	 */
+	void updateClient(Client client);
+
 }

@@ -49,7 +49,11 @@ public class ClientView extends View {
 			showClients();
 		} else if (ClientController.CLIENT_DELETE == type) {
 			List<BeanModel> clients = event.getData("clients");
-			groupClients(clients);
+			deleteClients(clients);
+		} else if (ClientController.CLIENT_INSTALL == type) {
+			List<BeanModel> clients = event.getData("clients");
+			InstalaceJSO instalace = event.getData("instalace");
+			installClients(clients, instalace);
 		} else if (CometController.LIFECYCLE_EVENT_TYPE == type) {
 			LifecycleEventJSO lifecycleEventJSO = (LifecycleEventJSO)event.getData();
 			onLifecycleEvent(lifecycleEventJSO);
@@ -87,7 +91,7 @@ public class ClientView extends View {
 	/**
 	 *
 	 */
-	private void groupClients(final List<BeanModel> clients) {
+	private void deleteClients(final List<BeanModel> clients) {
 		String clientsStr = "";
 		for (BeanModel beanModel : clients) {
 			ClientJSO c = beanModel.getBean();
@@ -124,6 +128,27 @@ public class ClientView extends View {
 		});
 
 	}
+
+	/**
+	 * @param clients
+	 * @param instalace
+	 */
+	private void installClients(List<BeanModel> clients, InstalaceJSO instalace) {
+		for (BeanModel beanModel : clients) {
+			ClientJSO client = beanModel.getBean();
+			ClientService.getInstance().installClient(client, instalace, new RemoteRequestCallback<Object>() {
+				@Override
+				public void onRequestSuccess(Object v) {
+				}
+
+				@Override
+				public void onRequestFailed(Throwable th) {
+					Info.display("Chyba při instalaci klienta", th.getMessage());
+				}
+			});
+		}
+	}
+
 
 	/**
 	 * @param lifecycleEventJSO
