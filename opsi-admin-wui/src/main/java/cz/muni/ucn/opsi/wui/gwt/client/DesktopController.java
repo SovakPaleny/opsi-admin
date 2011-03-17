@@ -21,6 +21,7 @@ import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 
 import cz.muni.ucn.opsi.wui.gwt.client.client.ClientController;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupController;
+import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
 
 /**
  * @author Jan Dosoudil
@@ -41,7 +42,7 @@ public class DesktopController extends Controller {
 	 */
 	public DesktopController() {
 //		registerEventTypes(LoginController.LOGIN_OK);
-//		registerEventTypes(LoginController.LOGGED_OUT);
+		registerEventTypes(LoginController.LOGGED_OUT);
 		registerEventTypes(DesktopController.WINDOW_CREATED);
 		registerEventTypes(DesktopController.WINDOW_DESTROYED);
 		registerEventTypes(DesktopController.INIT);
@@ -61,6 +62,8 @@ public class DesktopController extends Controller {
 			showDesktop();
 //			JSONObject object = event.getData();
 //			desktop.getStartMenu().setHeading(object.get("displayName").isString().stringValue());
+		} else if (LoginController.LOGGED_OUT == type) {
+			com.google.gwt.user.client.Window.Location.assign("index.html");
 /*
 		} else if (LoginController.LOGGED_OUT == type) {
 
@@ -207,7 +210,7 @@ public class DesktopController extends Controller {
 		tool.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent ce) {
-//				Dispatcher.forwardEvent(LoginController.LOGOUT);
+				Dispatcher.forwardEvent(LoginController.LOGOUT);
 			}
 		});
 		menu.addTool(tool);

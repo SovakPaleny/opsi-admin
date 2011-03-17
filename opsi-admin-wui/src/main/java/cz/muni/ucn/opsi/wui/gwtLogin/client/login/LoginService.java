@@ -22,7 +22,6 @@ public class LoginService {
 
 	private static final String LOGIN_URL = "j_spring_security_check";
 	private static final String LOGIN_STATUS_URL = "remote/loginStatus";
-	private static final String LOGOUT_URL = "j_spring_security_logout";
 
 	private static final LoginService INSTANCE = new LoginService();
 
@@ -97,53 +96,6 @@ public class LoginService {
 	public interface LoginCallback {
 		void onLoginOk(JSONObject loginStatus);
 		void onLoginFailed(String message);
-	}
-
-	/**
-	 *
-	 * @param callback
-	 */
-	public void logout(final LogoutCallback callback) {
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET,
-				URL.encode(GWT.getHostPageBaseURL() + LOGOUT_URL));
-
-		builder.setCallback(new RequestCallback() {
-
-			@Override
-			public void onResponseReceived(Request request, Response response) {
-				if (200 != response.getStatusCode()) {
-					GWT.log("Server odpovedel chybou pri odhlasovani: " + response.getStatusText());
-					callback.onLogoutFailed(response.getStatusText());
-				} else {
-					callback.onLogoutOk();
-				}
-
-			}
-
-			@Override
-			public void onError(Request request, Throwable exception) {
-				GWT.log("Nelze odeslat pozadavek na odhlaseni", exception);
-				callback.onLogoutFailed(exception.getMessage());
-			}
-		});
-
-		try {
-			builder.send();
-		} catch (RequestException e) {
-			GWT.log("Chyba při odesílání požadavku", e);
-			callback.onLogoutFailed(e.getMessage());
-		}
-
-
-	}
-
-	/**
-	 * @author Jan Dosoudil
-	 *
-	 */
-	public interface LogoutCallback {
-		void onLogoutOk();
-		void onLogoutFailed(String message);
 	}
 
 	public void getLoginStatus(final LoginStatusCallback callback) {

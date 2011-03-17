@@ -4,15 +4,15 @@
 package cz.muni.ucn.opsi.wui.gwtLogin.client.login;
 
 import com.extjs.gxt.ui.client.event.EventType;
+import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.mvc.AppEvent;
 import com.extjs.gxt.ui.client.mvc.Controller;
 import com.extjs.gxt.ui.client.mvc.Dispatcher;
-import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Window;
-
-import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 
 /**
  * @author Jan Dosoudil
@@ -21,10 +21,8 @@ import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 public class LoginController extends Controller {
 
 	public static final EventType LOGIN = new EventType();
-	public static final EventType LOGOUT = new EventType();
 	public static final EventType LOGIN_OK = new EventType();
 	public static final EventType LOGIN_FAIL = new EventType();
-	public static final EventType LOGGED_OUT = new EventType();
 
 	private LoginView loginView;
 
@@ -33,10 +31,8 @@ public class LoginController extends Controller {
 	 */
 	public LoginController() {
 		registerEventTypes(LoginController.LOGIN);
-		registerEventTypes(LoginController.LOGOUT);
 		registerEventTypes(LoginController.LOGIN_OK);
 		registerEventTypes(LoginController.LOGIN_FAIL);
-		registerEventTypes(LoginController.LOGGED_OUT);
 	}
 
 	/* (non-Javadoc)
@@ -47,8 +43,6 @@ public class LoginController extends Controller {
 		EventType type = event.getType();
 		if (LoginController.LOGIN == type) {
 			onLoginEvent(event);
-		} else if (LoginController.LOGOUT == type) {
-			onLogoutEvent(event);
 		} else if (LoginController.LOGIN_OK == type) {
 			onLoginOkEvent(event);
 		} else if (LoginController.LOGIN_FAIL == type) {
@@ -76,34 +70,16 @@ public class LoginController extends Controller {
 
 			@Override
 			public void onStatusFailed(String message) {
-				MessageDialog.showError("Nelze zjistit stav přihlášní", message);
+				MessageBox.alert("Nelze zjistit stav přihlášní", message,
+						new Listener<MessageBoxEvent>() {
+							@Override
+							public void handleEvent(MessageBoxEvent be) {
+							}
+						});
 			}
 		});
 
 	}
-
-
-	/**
-	 * @param event
-	 *
-	 */
-	protected void onLogoutEvent(AppEvent event) {
-
-		LoginService service = LoginService.getInstance();
-		service.logout(new LoginService.LogoutCallback() {
-
-			@Override
-			public void onLogoutOk() {
-				Dispatcher.forwardEvent(LoginController.LOGGED_OUT);
-			}
-
-			@Override
-			public void onLogoutFailed(String message) {
-				MessageDialog.showError("Chyba při odhlašování", message);
-			}
-		});
-	}
-
 
 	/**
 	 * @param event
