@@ -31,6 +31,7 @@ public class ClientService {
 	private static final String CLIENT_DELETE_URL = "remote/clients/delete";
 	private static final String CLIENT_INSTALL_URL = "remote/clients/install";
 	private static final String CLIENT_INSTALACTION_LIST_URL = "remote/instalation/list";
+	private static final String CLIENT_IMPORT_LIST_URL = "remote/clients/import/list";
 
 	private ClientService() {
 	}
@@ -202,6 +203,27 @@ public class ClientService {
 		request.setHeader("Content-Type", "application/json");
 
 		request.execute(callback);
+
+	}
+
+	/**
+	 * @param remoteRequestCallback
+	 */
+	public void listClientsForImport(GroupJSO group,
+			RemoteRequestCallback<List<ClientJSO>> callback) {
+
+		RemoteRequest<List<ClientJSO>> request = new RemoteRequest<List<ClientJSO>>(RequestBuilder.GET,
+				URL.encode(GWT.getHostPageBaseURL() + CLIENT_IMPORT_LIST_URL) +
+				"?groupUuid=" + URL.encodeQueryString(group.getUuid())) {
+
+			@Override
+			protected List<ClientJSO> transformResponse(String text) {
+				return transformArray(text);
+			}
+		};
+
+		request.execute(callback);
+
 
 	}
 

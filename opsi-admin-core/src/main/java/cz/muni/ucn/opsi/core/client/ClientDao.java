@@ -36,4 +36,9 @@ public interface ClientDao {
 	 */
 	List<Client> list(Group group);
 
+	/**
+	 * @return
+	 */
+	List<String> listNamesAll();
+
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -25,6 +26,7 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpEntity;
@@ -33,7 +35,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import cz.muni.ucn.opsi.api.client.Client;
@@ -284,6 +285,47 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		OpsiResponse responseProds = responseProdsEntity.getBody();
 
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#listClientsForImport()
+	 */
+	@Override
+	public List<Client> listClientsForImport() {
+		OpsiRequest requestProds = new OpsiRequest();
+		requestProds.setParams(Arrays.asList(new Object[] {}));
+		requestProds.setId(7);
+		requestProds.setMethod("getClients_listOfHashes");
+
+		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(requestProds);
+		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
+
+		OpsiResponse response = responseProdsEntity.getBody();
+
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> clientMaps = (List<Map<String, String>>) response.getResult();
+		List<Client> ret = new ArrayList<Client>(clientMaps.size());
+		for (Map<String,String> map : clientMaps) {
+			Client c = new Client(UUID.randomUUID());
+			c.setName(map.get("hostId"));
+			c.setDescription(map.get("description"));
+
+			String macAddress = map.get("hardwareAddress");
+			if (StringUtils.isBlank(macAddress)) {
+				macAddress = null;
+			}
+			c.setMacAddress(macAddress);
+
+			String ipAddress = map.get("ipAddress");
+			if (StringUtils.isBlank(ipAddress)) {
+				ipAddress = null;
+			}
+			c.setIpAddress(ipAddress);
+			ret.add(c);
+		}
+
+		return ret;
 	}
 
 	/* (non-Javadoc)

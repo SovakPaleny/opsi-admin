@@ -66,6 +66,7 @@ public class ClientWindow extends Window {
 	private Button buttonNew;
 	private Button buttonEdit;
 	private Button buttonRemove;
+	private Button buttonImport;
 	private MenuItem contextMenuNew;
 	private MenuItem contextMenuEdit;
 	private MenuItem contextMenuRemove;
@@ -193,6 +194,7 @@ public class ClientWindow extends Window {
 //					buttonEdit.enable();
 //					buttonRemove.enable();
 //					buttonInstall.enable();
+					buttonImport.enable();
 					contextMenuNew.enable();
 //					contextMenuEdit.enable();
 //					contextMenuRemove.enable();
@@ -358,6 +360,7 @@ public class ClientWindow extends Window {
 		buttonNew.setIcon(IconHelper.createStyle("add"));
 		buttonNew.setData("event", ClientController.CLIENT_NEW);
 		buttonNew.addSelectionListener(buttonListener);
+		buttonNew.disable();
 		toolbar.add(buttonNew);
 
 		buttonEdit = new Button(clientConstants.getClientEdit());
@@ -379,6 +382,13 @@ public class ClientWindow extends Window {
 		buttonInstall.disable();
 		buttonInstall.setMenu(createInstallMenu());
 		toolbar.add(buttonInstall);
+
+		buttonImport = new Button(clientConstants.getClientImport());
+		buttonImport.setIcon(IconHelper.createStyle("import"));
+		buttonImport.setData("event", ClientController.CLIENT_IMPORT);
+		buttonImport.addSelectionListener(buttonListener);
+		buttonImport.disable();
+		toolbar.add(buttonImport);
 
 
 		return toolbar;

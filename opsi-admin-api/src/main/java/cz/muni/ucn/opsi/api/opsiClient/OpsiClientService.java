@@ -46,4 +46,9 @@ public interface OpsiClientService {
 	 */
 	void updateClient(Client client);
 
+	/**
+	 * @return
+	 */
+	List<Client> listClientsForImport();
+
 }

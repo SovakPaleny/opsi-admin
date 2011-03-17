@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 import cz.muni.ucn.opsi.api.client.Client;
@@ -44,6 +46,24 @@ public class ClientDaoHibernate implements ClientDao {
 		Session session = sessionFactory.getCurrentSession();
 		ClientHibernate loaded = (ClientHibernate) session.get(ClientHibernate.class, client.getUuid());
 
+		if (!StringUtils.isBlank(client.getMacAddress())) {
+			@SuppressWarnings("unchecked")
+			List<ClientHibernate> macClients = session.createQuery("select c from Client c " +
+					" where c.macAddress = :mac")
+				.setParameter("mac", client.getMacAddress())
+				.list();
+
+			if (macClients.size() > 1 && loaded != null ||
+					macClients.size() > 0 && loaded == null) {
+				throw new DuplicateKeyException("Duplicate MacAddress: " + client.getMacAddress());
+			} else if (macClients.size() == 1 && loaded != null) {
+				ClientHibernate clientMac = macClients.get(0);
+				if (!clientMac.getUuid().equals(client.getUuid())) {
+					throw new DuplicateKeyException("Duplicate MacAddress: " + client.getMacAddress());
+				}
+			}
+		}
+
 		ClientHibernate toSave = transform(loaded, client);
 		session.save(toSave);
 		session.flush();
@@ -74,6 +94,20 @@ public class ClientDaoHibernate implements ClientDao {
 			.list();
 
 		return transform(list);
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.core.client.ClientDao#listNamesAll()
+	 */
+	@Override
+	public List<String> listNamesAll() {
+		Session session = sessionFactory.getCurrentSession();
+
+		@SuppressWarnings("unchecked")
+		List<String> list = session.createQuery("select c.name from Client c ")
+			.list();
+
+		return list;
 	}
 
 	/**

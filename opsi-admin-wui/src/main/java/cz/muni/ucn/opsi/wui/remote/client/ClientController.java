@@ -95,4 +95,9 @@ public class ClientController {
 		return clientService.listClients(UUID.fromString(groupUuid));
 	}
 
+	@RequestMapping(value = "/clients/import/list", method = RequestMethod.GET)
+	public @ResponseBody List<Client> listClientsForImport(@RequestParam String groupUuid) {
+		return clientService.listClientsForImport(UUID.fromString(groupUuid));
+	}
+
 }

@@ -55,4 +55,11 @@ public interface ClientService {
 	@Secured("ROLE_USER")
 	void installClient(Client client, Instalation i);
 
+	/**
+	 * @param fromString
+	 * @return
+	 */
+	@Secured("ROLE_ADMIN")
+	List<Client> listClientsForImport(UUID groupUuid);
+
 }

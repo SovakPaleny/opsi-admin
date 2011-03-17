@@ -21,9 +21,11 @@ public class ClientController extends Controller {
 	public static final EventType CLIENT_EDIT = new EventType();
 	public static final EventType CLIENT_DELETE = new EventType();
 	public static final EventType CLIENT_INSTALL = new EventType();
+	public static final EventType CLIENT_IMPORT = new EventType();
 
 	private ClientView clientView;
 	private ClientEditView clientEditView;
+	private ClientImportView clientImportView;
 
 	/**
 	 *
@@ -34,6 +36,7 @@ public class ClientController extends Controller {
 		registerEventTypes(ClientController.CLIENT_EDIT);
 		registerEventTypes(ClientController.CLIENT_DELETE);
 		registerEventTypes(ClientController.CLIENT_INSTALL);
+		registerEventTypes(ClientController.CLIENT_IMPORT);
 		registerEventTypes(CometController.LIFECYCLE_EVENT_TYPE);
 	}
 
@@ -53,6 +56,8 @@ public class ClientController extends Controller {
 			clientDelete(event);
 		} else if (ClientController.CLIENT_INSTALL == type) {
 			clientInstall(event);
+		} else if (ClientController.CLIENT_IMPORT == type) {
+			clientImport(event);
 		} else if (CometController.LIFECYCLE_EVENT_TYPE == type) {
 			onLifecycleEvent(event);
 		}
@@ -66,6 +71,7 @@ public class ClientController extends Controller {
 		super.initialize();
 		clientView = new ClientView(this);
 		clientEditView = new ClientEditView(this);
+		clientImportView = new ClientImportView(this);
 	}
 
 	/**
@@ -101,6 +107,13 @@ public class ClientController extends Controller {
 	 */
 	private void clientInstall(AppEvent event) {
 		forwardToView(clientView, event);
+	}
+
+	/**
+	 * @param event
+	 */
+	private void clientImport(AppEvent event) {
+		forwardToView(clientImportView, event);
 	}
 
 	/**

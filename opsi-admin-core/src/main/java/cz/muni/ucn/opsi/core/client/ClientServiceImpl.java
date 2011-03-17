@@ -3,8 +3,11 @@
  */
 package cz.muni.ucn.opsi.core.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
@@ -135,6 +138,31 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 		checkGroupRights(group);
 
 		opsiClientService.clientInstall(client, i);
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.client.ClientService#listClientsForImport(java.util.UUID)
+	 */
+	@Override
+	public List<Client> listClientsForImport(UUID groupUuid) {
+		Group group = groupService.getGroup(groupUuid);
+
+		List<Client> clients = opsiClientService.listClientsForImport();
+		List<String> namesList = clientDao.listNamesAll();
+		Set<String> names = new HashSet<String>();
+		for (String name : namesList) {
+			names.add(name.trim().toLowerCase());
+		}
+		List<Client> ret = new ArrayList<Client>();
+		for (Client client : clients) {
+			String name = client.getName().trim().toLowerCase();
+			if (names.contains(name)) {
+				continue;
+			}
+			client.setGroup(group);
+			ret.add(client);
+		}
+		return ret;
 	}
 
 	protected void checkGroupRights(Group group) {

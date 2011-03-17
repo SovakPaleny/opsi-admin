@@ -52,7 +52,7 @@ public class ClientEditWindow extends Window {
 
 	private FormBinding binding;
 
-	private ClientJSO group;
+	private ClientJSO client;
 
 	/**
 	 * @param newClient
@@ -219,7 +219,7 @@ public class ClientEditWindow extends Window {
 				synchronizeState();
 
 				ClientService groupService = ClientService.getInstance();
-				groupService.saveClient(group, new RemoteRequestCallback<Object>() {
+				groupService.saveClient(client, new RemoteRequestCallback<Object>() {
 					@Override
 					public void onRequestSuccess(Object v) {
 						ClientEditWindow.this.enable();
@@ -243,7 +243,7 @@ public class ClientEditWindow extends Window {
 	 * @param group
 	 */
 	public void setGroupModel(ClientJSO group) {
-		this.group = group;
+		this.client = group;
 		BeanModel model = BeanModelLookup.get().getFactory(ClientJSO.CLASS_NAME).createModel(group);
 		binding.bind(model);
 
@@ -257,7 +257,7 @@ public class ClientEditWindow extends Window {
 		if (newClient) {
 			setHeading("Nová skupina");
 		} else {
-			setHeading("Úprava skupiny: " + group.getName());
+			setHeading("Úprava skupiny: " + client.getName());
 		}
 	}
 
