@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 
 import cz.muni.ucn.opsi.wui.gwt.client.DesktopController;
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.event.CometController;
 import cz.muni.ucn.opsi.wui.gwt.client.event.LifecycleEventJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
@@ -82,7 +83,7 @@ public class ClientView extends View {
 
 			@Override
 			public void onFailure(Throwable reason) {
-				Info.display("Akci nelze provést", reason.getMessage());
+				MessageDialog.showError("Akci nelze provést", reason.getMessage());
 			}
 		});
 
@@ -120,7 +121,7 @@ public class ClientView extends View {
 
 						@Override
 						public void onRequestFailed(Throwable th) {
-							Info.display("Chyba při ostraňování klienta", th.getMessage());
+							MessageDialog.showError("Chyba při ostraňování klienta", th.getMessage());
 						}
 					});
 				}
@@ -143,7 +144,7 @@ public class ClientView extends View {
 
 				@Override
 				public void onRequestFailed(Throwable th) {
-					Info.display("Chyba při instalaci klienta", th.getMessage());
+					MessageDialog.showError("Chyba při instalaci klienta", th.getMessage());
 				}
 			});
 		}

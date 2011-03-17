@@ -29,6 +29,7 @@ import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.google.gwt.core.client.GWT;
 
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelLookup;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
@@ -163,7 +164,7 @@ public class GroupEditWindow extends Window {
 					@Override
 					public void onRequestFailed(Throwable th) {
 						GroupEditWindow.this.enable();
-						Info.display("Nelze uložit skupinu", th.getMessage());
+						MessageDialog.showError("Nelze uložit skupinu", th.getMessage());
 					}
 				});
 

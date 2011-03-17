@@ -43,6 +43,7 @@ import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.GWT;
 
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelFactory;
 import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelLookup;
 import cz.muni.ucn.opsi.wui.gwt.client.event.LifecycleEventJSO;
@@ -160,7 +161,7 @@ public class ClientWindow extends Window {
 
 			@Override
 			public void onRequestFailed(Throwable th) {
-				Info.display("Chyba při získávání seznamu skupin: ", th.getMessage());
+				MessageDialog.showError("Chyba při získávání seznamu skupin: ", th.getMessage());
 			}
 		});
 
@@ -335,7 +336,7 @@ public class ClientWindow extends Window {
 
 			@Override
 			public void onRequestFailed(Throwable th) {
-				Info.display("Chyba při získávání seznamu skupin: ", th.getMessage());
+				MessageDialog.showError("Chyba při získávání seznamu skupin: ", th.getMessage());
 				clientsGrid.unmask();
 			}
 		});

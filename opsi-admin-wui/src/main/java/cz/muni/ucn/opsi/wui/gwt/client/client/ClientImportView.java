@@ -13,6 +13,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 
 import cz.muni.ucn.opsi.wui.gwt.client.DesktopController;
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
 
 /**
@@ -53,7 +54,8 @@ public class ClientImportView extends View {
 
 			@Override
 			public void onFailure(Throwable reason) {
-				Info.display("Operaci nelze provést", reason.getMessage());
+				MessageDialog.showError("Operaci nelze provést", reason.getMessage());
+
 			}
 		});
 	}

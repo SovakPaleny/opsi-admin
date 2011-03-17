@@ -12,6 +12,8 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.user.client.Window;
 
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
+
 /**
  * @author Jan Dosoudil
  *
@@ -74,7 +76,7 @@ public class LoginController extends Controller {
 
 			@Override
 			public void onStatusFailed(String message) {
-				Info.display("Nelze zjistit stav přihlášní", message);
+				MessageDialog.showError("Nelze zjistit stav přihlášní", message);
 			}
 		});
 
@@ -97,7 +99,7 @@ public class LoginController extends Controller {
 
 			@Override
 			public void onLogoutFailed(String message) {
-				Info.display("Chyba při odhlašování", message);
+				MessageDialog.showError("Chyba při odhlašování", message);
 			}
 		});
 	}

@@ -27,6 +27,7 @@ import com.extjs.gxt.ui.client.widget.layout.FitData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.core.client.GWT;
 
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelFactory;
 import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelLookup;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
@@ -140,7 +141,7 @@ public class ClientImportWindow extends Window {
 
 			@Override
 			public void onRequestFailed(Throwable th) {
-				Info.display("Chyba při získávání seznamu klientů pro import: ", th.getMessage());
+				MessageDialog.showError("Chyba při získávání seznamu klientů pro import: ", th.getMessage());
 			}
 		});
 
@@ -192,7 +193,7 @@ public class ClientImportWindow extends Window {
 						@Override
 						public void onRequestFailed(Throwable th) {
 //							ClientImportWindow.this.enable();
-							Info.display("Nelze uložit klienta", th.getMessage());
+							MessageDialog.showError("Nelze uložit klienta", th.getMessage());
 						}
 					});
 				}

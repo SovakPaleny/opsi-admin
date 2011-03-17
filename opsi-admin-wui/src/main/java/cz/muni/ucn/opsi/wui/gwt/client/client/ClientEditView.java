@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 
 import cz.muni.ucn.opsi.wui.gwt.client.DesktopController;
+import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
@@ -67,7 +68,7 @@ public class ClientEditView extends View {
 
 			@Override
 			public void onFailure(Throwable reason) {
-				Info.display("Operaci nelze provést", reason.getMessage());
+				MessageDialog.showError("Operaci nelze provést", reason.getMessage());
 			}
 		});
 
@@ -87,7 +88,7 @@ public class ClientEditView extends View {
 
 				@Override
 				public void onRequestFailed(Throwable th) {
-					Info.display("Nelze založit klienta", th.getMessage());
+					MessageDialog.showError("Nelze založit klienta", th.getMessage());
 				}
 			});
 		} else {
@@ -99,7 +100,7 @@ public class ClientEditView extends View {
 
 				@Override
 				public void onRequestFailed(Throwable th) {
-					Info.display("Nelze upravit klienta", th.getMessage());
+					MessageDialog.showError("Nelze upravit klienta", th.getMessage());
 				}
 			});
 
