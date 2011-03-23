@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-/*
-Package pkg = cz.u2.eis.business.api.task.Task.class.getPackage();
+
+Package pkg = cz.muni.ucn.opsi.api.client.Client.class.getPackage();
 StringBuilder sb = new StringBuilder();
 if (pkg.getImplementationTitle() != null) {
         sb.append(pkg.getImplementationTitle());
@@ -15,7 +15,7 @@ if (pkg.getImplementationTitle() != null) {
 		sb.append("development");
 }
 pageContext.setAttribute("currentVersion", sb.toString());
-*/
+
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -97,7 +97,7 @@ pageContext.setAttribute("currentVersion", sb.toString());
 <div id="loading">
     <div class="loading-indicator">
     <img src="gxt/images/default/shared/large-loading.gif" width="32" height="32"/>OPSI Admin<br />
-    <span id="loading-msg">${currentVersion}<br/>
+    <span id="loading-msg"><% out.print(pageContext.getAttribute("currentVersion")); %><br/>
     	Probíhá&nbsp;načítání&nbsp;aplikace...</span>
     </div>
 </div>

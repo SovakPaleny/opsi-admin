@@ -86,7 +86,7 @@ public class LoginController extends Controller {
 	 *
 	 */
 	protected void onLoginOkEvent(AppEvent event) {
-		Window.Location.assign("index.html");
+		Window.Location.assign("index.jsp");
 	}
 
 
