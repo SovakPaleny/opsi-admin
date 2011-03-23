@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -47,17 +48,14 @@ import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
  */
 //@Service
 public class OpsiClientServiceImpl implements OpsiClientService, InitializingBean {
-//
-//	private static final String OPSI_SCHEMA = "https";
-//	private static final String OPSI_SERVER = "opsi.ucn.muni.cz";
-//	private static final int OPSI_PORT = 4447;
-//	private static final String OPSI_URL = OPSI_SCHEMA + "://" + OPSI_SERVER + ":" + OPSI_PORT + "/rpc";
 
 	private RestTemplate template;
 
 	private URL opsiUrl;
 	private String userName;
 	private String password;
+
+	private AtomicInteger sequence = new AtomicInteger();
 
 	public void init() {
 
@@ -112,8 +110,6 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		Protocol.registerProtocol("https", easyhttps);
 
 		HttpClient httpClient = new HttpClient();
-		userName = "opsiuser";
-		password = "Kaka0.Pramen";
 		Credentials credentials = new UsernamePasswordCredentials(userName, password);
 		int port = opsiUrl.getPort();
 		if (-1 == port) {
@@ -138,7 +134,6 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	@Override
 	public void createClient(Client client) {
 
-		OpsiRequest request = new OpsiRequest();
 		String name = client.getName();
 		int indexOf = name.indexOf(".");
 
@@ -148,18 +143,9 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		String notes = "";
 		String ipaddress = client.getIpAddress();
 		String macaddress = client.getMacAddress();
-		request.setParams(Arrays.asList(new Object[] {
-				hostname, domainname, description, notes, ipaddress, macaddress}));
-		request.setId(1);
-		request.setMethod("createClient");
 
-		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
-		ResponseEntity<OpsiResponse> responseEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
-
-		OpsiResponse response = responseEntity.getBody();
-
-
+		OpsiResponse response = callOpsi("createClient", hostname, domainname,
+				description, notes, ipaddress, macaddress);
 
 		response.toString();
 
@@ -170,16 +156,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 */
 	@Override
 	public void deleteClient(Client client) {
-		OpsiRequest requestProds = new OpsiRequest();
-		requestProds.setParams(Arrays.asList(new Object[] {client.getName()}));
-		requestProds.setId(5);
-		requestProds.setMethod("deleteClient");
-
-		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
-		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
-
-		OpsiResponse responseProds = responseProdsEntity.getBody();
+		callOpsi("deleteClient", client.getName());
 
 	}
 
@@ -188,9 +165,13 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 */
 	@Override
 	public void updateClient(Client client) {
-		// TODO Auto-generated method stub
-
-
+		callOpsi("setMacAddress", client.getName(), client.getMacAddress());
+		String description = client.getDescription();
+		if (null == description) {
+			description = "";
+		}
+		callOpsi("setHostDescription", client.getName(), description);
+//		callOpsi("setHostNotes", client.getName(), client.getIpAddress());
 	}
 
 	/* (non-Javadoc)
@@ -198,32 +179,16 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 */
 	@Override
 	public List<Instalation> listInstalations() {
-		OpsiRequest requestProds = new OpsiRequest();
-		requestProds.setParams(Arrays.asList(new Object[] {}));
-		requestProds.setId(2);
-		requestProds.setMethod("getProducts_hash");
 
-		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
-		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
-
-		OpsiResponse responseProds = responseProdsEntity.getBody();
+		OpsiResponse responseProds = callOpsi("getProducts_hash");
 
 		@SuppressWarnings("unchecked")
 		Map<String, Map<String, Map<String, String>>> depoMap =
 			(Map<String, Map<String, Map<String, String>>>) responseProds.getResult();
 		Map<String, Map<String, String>> prodMap = depoMap.values().iterator().next();
 
-		OpsiRequest request = new OpsiRequest();
-		request.setParams(Arrays.asList(new Object[] {null, null}));
-		request.setId(3);
-		request.setMethod("getNetBootProductIds_list");
+		OpsiResponse response = callOpsi("getNetBootProductIds_list", null, null);
 
-		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(request);
-		ResponseEntity<OpsiResponse> responseEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
-
-		OpsiResponse response = responseEntity.getBody();
 		@SuppressWarnings("unchecked")
 		List<Object> res = (List<Object>) response.getResult();
 		List<Instalation> ret = new ArrayList<Instalation>();
@@ -247,16 +212,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 */
 	@Override
 	public Instalation getIntalationById(String instalationId) {
-		OpsiRequest requestProds = new OpsiRequest();
-		requestProds.setParams(Arrays.asList(new Object[] {instalationId}));
-		requestProds.setId(4);
-		requestProds.setMethod("getProduct_hash");
-
-		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
-		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
-
-		OpsiResponse responseProds = responseProdsEntity.getBody();
+		OpsiResponse responseProds = callOpsi("getProduct_hash", instalationId);
 
 		@SuppressWarnings("unchecked")
 		Map<String, String> produktMap = (Map<String, String>) responseProds.getResult();
@@ -274,16 +230,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 */
 	@Override
 	public void clientInstall(Client client, Instalation i) {
-		OpsiRequest requestProds = new OpsiRequest();
-		requestProds.setParams(Arrays.asList(new Object[] {i.getId(), client.getName(), "setup"}));
-		requestProds.setId(6);
-		requestProds.setMethod("setProductActionRequest");
-
-		HttpEntity<OpsiRequest> requestProdsEntity = new HttpEntity<OpsiRequest>(requestProds);
-		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestProdsEntity, OpsiResponse.class);
-
-		OpsiResponse responseProds = responseProdsEntity.getBody();
+		callOpsi("setProductActionRequest", i.getId(), client.getName(), "setup");
 
 	}
 
@@ -292,16 +239,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 */
 	@Override
 	public List<Client> listClientsForImport() {
-		OpsiRequest requestProds = new OpsiRequest();
-		requestProds.setParams(Arrays.asList(new Object[] {}));
-		requestProds.setId(7);
-		requestProds.setMethod("getClients_listOfHashes");
-
-		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(requestProds);
-		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
-
-		OpsiResponse response = responseProdsEntity.getBody();
+		OpsiResponse response = callOpsi("getClients_listOfHashes");
 
 		@SuppressWarnings("unchecked")
 		List<Map<String, String>> clientMaps = (List<Map<String, String>>) response.getResult();
@@ -326,6 +264,34 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		}
 
 		return ret;
+	}
+
+	/**
+	 * @return
+	 */
+	protected int getRequestId() {
+		return sequence.incrementAndGet();
+	}
+
+	/**
+	 *
+	 * @param method
+	 * @param args
+	 * @return
+	 */
+	protected OpsiResponse callOpsi(String method, Object... args) {
+		OpsiRequest requestProds = new OpsiRequest();
+		requestProds.setParams(Arrays.asList(args));
+		requestProds.setId(getRequestId());
+		requestProds.setMethod(method);
+
+		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(requestProds);
+		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
+
+		OpsiResponse response = responseProdsEntity.getBody();
+
+		return response;
 	}
 
 	/* (non-Javadoc)
