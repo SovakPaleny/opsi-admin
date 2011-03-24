@@ -3,19 +3,16 @@
  */
 package cz.muni.ucn.opsi.wui.remote.client;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,17 +99,4 @@ public class ClientController {
 	public @ResponseBody List<Client> listClientsForImport(@RequestParam String groupUuid) {
 		return clientService.listClientsForImport(UUID.fromString(groupUuid));
 	}
-
-	@ExceptionHandler
-	public void exceptionHandler(Throwable exception,
-			HttpServletResponse response) throws IOException {
-
-		String message = exception.getMessage();
-
-		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
-
-//		RequestError error = new RequestError(message);
-//		return error;
-	}
-
 }

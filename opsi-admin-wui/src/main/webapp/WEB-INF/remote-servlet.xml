@@ -79,4 +79,6 @@
 -->
 	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 
+	<bean class="cz.muni.ucn.opsi.wui.remote.JsonExceptionResolver"/>
+
 </beans>
