@@ -9,9 +9,9 @@
  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="RootFileAppender">
    <append>true</append>
    <maxHistory>30</maxHistory>
-   <file>${eis.home}/logs/eshop-wui.log</file>
+   <file>${eis.home}/logs/opsi-admin-wui.log</file>
    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-     <fileNamePattern>${eis.home}/logs/business-wui.%d{yyyy-MM-dd}.gz</fileNamePattern>
+     <fileNamePattern>${eis.home}/logs/opsi-admin-wui.%d{yyyy-MM-dd}.gz</fileNamePattern>
    </rollingPolicy>
    <layout class="ch.qos.logback.classic.PatternLayout">
      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
