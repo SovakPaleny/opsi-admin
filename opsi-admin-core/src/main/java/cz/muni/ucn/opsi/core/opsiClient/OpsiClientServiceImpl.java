@@ -285,13 +285,16 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		requestProds.setId(getRequestId());
 		requestProds.setMethod(method);
 
-		HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(requestProds);
-		ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
-				opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
+		synchronized (this) {
 
-		OpsiResponse response = responseProdsEntity.getBody();
+			HttpEntity<OpsiRequest> requestEntity = new HttpEntity<OpsiRequest>(requestProds);
+			ResponseEntity<OpsiResponse> responseProdsEntity = template.exchange(
+					opsiUrl.toString(), HttpMethod.POST, requestEntity, OpsiResponse.class);
 
-		return response;
+			OpsiResponse response = responseProdsEntity.getBody();
+
+			return response;
+		}
 	}
 
 	/* (non-Javadoc)

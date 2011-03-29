@@ -47,6 +47,8 @@ public class ClientImportWindow extends Window {
 	private Grid<BeanModel> clientsGrid;
 	private BeanModelFactory clientFactory;
 
+	private int importCount = 0;
+
 	/**
 	 * @param newClient
 	 */
@@ -171,27 +173,34 @@ public class ClientImportWindow extends Window {
 			@Override
 			public void componentSelected(final ButtonEvent ce) {
 
-//				ClientImportWindow.this.disable();
+				ClientImportWindow.this.disable();
 
 				synchronizeState();
 
 				ClientService clientService = ClientService.getInstance();
 
 				List<BeanModel> selectedItems = clientsGrid.getSelectionModel().getSelectedItems();
+
+				importCount = selectedItems.size();
+
 				for (final BeanModel beanModel : selectedItems) {
 					ClientJSO client = beanModel.getBean();
 					clientService.saveClient(client, new RemoteRequestCallback<Object>() {
 
 						@Override
 						public void onRequestSuccess(Object v) {
-//							ClientImportWindow.this.enable();
+							if (--importCount <= 0) {
+								ClientImportWindow.this.enable();
+							}
 //							ClientImportWindow.this.hide(ce.getButton());
 							ClientImportWindow.this.clientStore.remove(beanModel);
 						}
 
 						@Override
 						public void onRequestFailed(Throwable th) {
-//							ClientImportWindow.this.enable();
+							if (--importCount <= 0) {
+								ClientImportWindow.this.enable();
+							}
 							MessageDialog.showError("Nelze uložit klienta", th.getMessage());
 						}
 					});
