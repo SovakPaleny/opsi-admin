@@ -150,22 +150,6 @@ public class ClientWindow extends Window {
 			}
 		});
 
-		GroupService groupService = GroupService.getInstance();
-
-		groupService.listGroups(new RemoteRequestCallback<List<GroupJSO>>() {
-			@Override
-			public void onRequestSuccess(List<GroupJSO> groups) {
-				List<BeanModel> groupModels = clientFactory.createModel(groups);
-				groupsStore.removeAll();
-				groupsStore.add(groupModels);
-			}
-
-			@Override
-			public void onRequestFailed(Throwable th) {
-				MessageDialog.showError("Chyba při získávání seznamu skupin: ", th.getMessage());
-			}
-		});
-
 		ColumnConfig nazev = new ColumnConfig("name", groupConstants.getName(), 180);
 
 		List<ColumnConfig> config = new ArrayList<ColumnConfig>();
@@ -213,6 +197,27 @@ public class ClientWindow extends Window {
 
 		groupGrid.addPlugin(filters);
 
+
+		GroupService groupService = GroupService.getInstance();
+
+		groupGrid.mask(GXT.MESSAGES.loadMask_msg());
+
+		groupService.listGroups(new RemoteRequestCallback<List<GroupJSO>>() {
+			@Override
+			public void onRequestSuccess(List<GroupJSO> groups) {
+				List<BeanModel> groupModels = clientFactory.createModel(groups);
+				groupsStore.removeAll();
+				groupsStore.add(groupModels);
+				groupGrid.unmask();
+			}
+
+			@Override
+			public void onRequestFailed(Throwable th) {
+				MessageDialog.showError("Chyba při získávání seznamu skupin: ", th.getMessage());
+			}
+		});
+
+
 	}
 
 	private void createClients() {
@@ -241,7 +246,7 @@ public class ClientWindow extends Window {
 
 		ColumnConfig name = new ColumnConfig("name", clientConstants.getName(), 180);
 		ColumnConfig description = new ColumnConfig("description", clientConstants.getDescription(), 180);
-		ColumnConfig macAddress = new ColumnConfig("macAddress", clientConstants.getMacAddress(), 100);
+		ColumnConfig macAddress = new ColumnConfig("macAddress", clientConstants.getMacAddress(), 140);
 		ColumnConfig ipAddress = new ColumnConfig("ipAddress", clientConstants.getIpAddress(), 80);
 
 		final CheckBoxSelectionModel<BeanModel> sm = new CheckBoxSelectionModel<BeanModel>();

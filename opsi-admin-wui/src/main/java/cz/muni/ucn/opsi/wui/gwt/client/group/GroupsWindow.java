@@ -6,6 +6,7 @@ package cz.muni.ucn.opsi.wui.gwt.client.group;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.extjs.gxt.ui.client.GXT;
 import com.extjs.gxt.ui.client.Style.SortDir;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.ModelComparer;
@@ -70,7 +71,7 @@ public class GroupsWindow extends Window {
 		setMinimizable(true);
 		setMaximizable(true);
 		setHeading("Správa skupin");
-		setSize(840, 400);
+		setSize(400, 400);
 		setLayout(new FitLayout());
 
 		ToolBar toolbar = createToolbar();
@@ -97,22 +98,6 @@ public class GroupsWindow extends Window {
 					return false;
 				}
 				return m1.get("uuid").equals(m2.get("uuid"));
-			}
-		});
-
-		GroupService groupService = GroupService.getInstance();
-
-		groupService.listGroups(new RemoteRequestCallback<List<GroupJSO>>() {
-			@Override
-			public void onRequestSuccess(List<GroupJSO> groups) {
-				List<BeanModel> groupModels = factory.createModel(groups);
-				store.removeAll();
-				store.add(groupModels);
-			}
-
-			@Override
-			public void onRequestFailed(Throwable th) {
-				MessageDialog.showError("Chyba při získávání seznamu skupin: ", th.getMessage());
 			}
 		});
 
@@ -174,6 +159,25 @@ public class GroupsWindow extends Window {
 		add(grid);
 
 
+
+		GroupService groupService = GroupService.getInstance();
+
+		grid.mask(GXT.MESSAGES.loadMask_msg());
+
+		groupService.listGroups(new RemoteRequestCallback<List<GroupJSO>>() {
+			@Override
+			public void onRequestSuccess(List<GroupJSO> groups) {
+				List<BeanModel> groupModels = factory.createModel(groups);
+				store.removeAll();
+				store.add(groupModels);
+				grid.unmask();
+			}
+
+			@Override
+			public void onRequestFailed(Throwable th) {
+				MessageDialog.showError("Chyba při získávání seznamu skupin: ", th.getMessage());
+			}
+		});
 
 	}
 

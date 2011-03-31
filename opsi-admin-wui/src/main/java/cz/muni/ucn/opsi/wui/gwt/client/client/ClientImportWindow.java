@@ -6,6 +6,7 @@ package cz.muni.ucn.opsi.wui.gwt.client.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.extjs.gxt.ui.client.GXT;
 import com.extjs.gxt.ui.client.Style.SortDir;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.ModelComparer;
@@ -62,7 +63,7 @@ public class ClientImportWindow extends Window {
 		setIcon(IconHelper.createStyle("icon-grid"));
 		setMinimizable(true);
 		setMaximizable(true);
-		setSize(600, 350);
+		setSize(640, 350);
 		setHeading("Import klientů");
 //		setBodyStyle("padding: 0px; ");
 
@@ -96,7 +97,7 @@ public class ClientImportWindow extends Window {
 
 		ColumnConfig name = new ColumnConfig("name", clientConstants.getName(), 180);
 		ColumnConfig description = new ColumnConfig("description", clientConstants.getDescription(), 180);
-		ColumnConfig macAddress = new ColumnConfig("macAddress", clientConstants.getMacAddress(), 100);
+		ColumnConfig macAddress = new ColumnConfig("macAddress", clientConstants.getMacAddress(), 140);
 		ColumnConfig ipAddress = new ColumnConfig("ipAddress", clientConstants.getIpAddress(), 80);
 
 		final CheckBoxSelectionModel<BeanModel> sm = new CheckBoxSelectionModel<BeanModel>();
@@ -130,6 +131,8 @@ public class ClientImportWindow extends Window {
 		add(clientsGrid, new FitData());
 
 
+		clientsGrid.mask(GXT.MESSAGES.loadMask_msg());
+
 		ClientService clientService = ClientService.getInstance();
 
 		clientService.listClientsForImport(this.group, new RemoteRequestCallback<List<ClientJSO>>() {
@@ -138,11 +141,14 @@ public class ClientImportWindow extends Window {
 				List<BeanModel> clientModels = clientFactory.createModel(clients);
 				clientStore.removeAll();
 				clientStore.add(clientModels);
+				clientsGrid.unmask();
+
 			}
 
 			@Override
 			public void onRequestFailed(Throwable th) {
 				MessageDialog.showError("Chyba při získávání seznamu klientů pro import: ", th.getMessage());
+				clientsGrid.unmask();
 			}
 		});
 
@@ -173,6 +179,7 @@ public class ClientImportWindow extends Window {
 			@Override
 			public void componentSelected(final ButtonEvent ce) {
 
+				clientsGrid.mask(GXT.MESSAGES.loadMask_msg());
 				ClientImportWindow.this.disable();
 
 				synchronizeState();
@@ -191,6 +198,8 @@ public class ClientImportWindow extends Window {
 						public void onRequestSuccess(Object v) {
 							if (--importCount <= 0) {
 								ClientImportWindow.this.enable();
+								clientsGrid.unmask();
+
 							}
 //							ClientImportWindow.this.hide(ce.getButton());
 							ClientImportWindow.this.clientStore.remove(beanModel);
@@ -200,6 +209,7 @@ public class ClientImportWindow extends Window {
 						public void onRequestFailed(Throwable th) {
 							if (--importCount <= 0) {
 								ClientImportWindow.this.enable();
+								clientsGrid.unmask();
 							}
 							MessageDialog.showError("Nelze uložit klienta", th.getMessage());
 						}

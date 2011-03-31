@@ -6,6 +6,7 @@ package cz.muni.ucn.opsi.wui.gwt.client.instalation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.extjs.gxt.ui.client.GXT;
 import com.extjs.gxt.ui.client.Style.SortDir;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.data.ModelComparer;
@@ -42,6 +43,7 @@ public class InstalationWindow extends Window {
 	private ListStore<BeanModel> toStore;
 	private boolean loadedFrom = false;
 	private boolean loadedTo = false;
+	private DualListField<BeanModel> lists;
 
 	/**
 	 *
@@ -84,7 +86,7 @@ public class InstalationWindow extends Window {
 			}
 		};
 
-	    final DualListField<BeanModel> lists = new DualListField<BeanModel>();
+	    lists = new DualListField<BeanModel>();
 	    lists.setMode(Mode.APPEND);
 	    lists.setFieldLabel("instalace");
 
@@ -103,6 +105,9 @@ public class InstalationWindow extends Window {
 	    toStore.setKeyProvider(keyProvider);
 	    toStore.setModelComparer(comparer);
 	    to.setStore(toStore);
+
+
+		lists.mask(GXT.MESSAGES.loadMask_msg());
 
 
 	    InstalationService groupService = InstalationService.getInstance();
@@ -156,6 +161,8 @@ public class InstalationWindow extends Window {
 			BeanModel m = toStore.getAt(i);
 			fromStore.remove(m);
 		}
+		lists.unmask();
+
 	}
 
 	/**
