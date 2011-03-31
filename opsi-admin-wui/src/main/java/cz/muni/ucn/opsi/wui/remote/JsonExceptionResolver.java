@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
@@ -22,6 +24,8 @@ import cz.muni.ucn.opsi.api.RequestError;
  */
 public class JsonExceptionResolver extends AbstractHandlerExceptionResolver {
 
+	private Logger logger = LoggerFactory.getLogger(JsonExceptionResolver.class);
+
 	/* (non-Javadoc)
 	 * @see org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver#doResolveException(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
 	 */
@@ -29,6 +33,7 @@ public class JsonExceptionResolver extends AbstractHandlerExceptionResolver {
 	protected ModelAndView doResolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
 
+		logger.info("submitting exception to client", ex);
 
 		String message = ex.getMessage();
 		RequestError error = new RequestError(message);

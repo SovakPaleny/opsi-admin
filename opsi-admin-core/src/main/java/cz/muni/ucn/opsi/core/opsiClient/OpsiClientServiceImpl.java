@@ -28,6 +28,7 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpEntity;
@@ -293,6 +294,11 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 			OpsiResponse response = responseProdsEntity.getBody();
 
+			Map<String, Object> error = response.getError();
+			if (null != error && error.containsKey("message")) {
+				throw new OpsiException(error.get("message").toString());
+			}
+
 			return response;
 		}
 	}
@@ -376,7 +382,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	public static class OpsiResponse {
 		private int id;
 		private Object result;
-		private String error;
+		private Map<String, Object> error;
 		/**
 		 * @return the id
 		 */
@@ -404,17 +410,46 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		/**
 		 * @return the error
 		 */
-		public String getError() {
+		public Map<String, Object> getError() {
 			return error;
 		}
 		/**
 		 * @param error the error to set
 		 */
-		public void setError(String error) {
+		public void setError(Map<String, Object> error) {
 			this.error = error;
 		}
 
+	}
 
+	public static class OpsiError {
+		private String message;
+		private String messageClass;
+		/**
+		 * @return the message
+		 */
+		public String getMessage() {
+			return message;
+		}
+		/**
+		 * @param message the message to set
+		 */
+		public void setMessage(String message) {
+			this.message = message;
+		}
+		/**
+		 * @return the messageClass
+		 */
+		@JsonProperty("class")
+		public String getMessageClass() {
+			return messageClass;
+		}
+		/**
+		 * @param messageClass the messageClass to set
+		 */
+		public void setMessageClass(String messageClass) {
+			this.messageClass = messageClass;
+		}
 	}
 
 }
