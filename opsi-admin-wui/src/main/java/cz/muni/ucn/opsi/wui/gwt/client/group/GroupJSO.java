@@ -9,7 +9,7 @@ import com.google.gwt.core.client.JsArray;
 import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelTag;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class GroupJSO extends JavaScriptObject implements BeanModelTag {

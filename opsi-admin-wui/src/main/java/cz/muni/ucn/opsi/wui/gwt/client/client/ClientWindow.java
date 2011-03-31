@@ -49,6 +49,8 @@ import cz.muni.ucn.opsi.wui.gwt.client.event.LifecycleEventJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupConstants;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupService;
+import cz.muni.ucn.opsi.wui.gwt.client.instalation.InstalaceJSO;
+import cz.muni.ucn.opsi.wui.gwt.client.instalation.InstalationService;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
 /**
@@ -210,6 +212,7 @@ public class ClientWindow extends Window {
 		filters.addFilter(new StringFilter("group"));
 
 		groupGrid.addPlugin(filters);
+
 	}
 
 	private void createClients() {
@@ -300,8 +303,12 @@ public class ClientWindow extends Window {
 			public void handleEvent(GridEvent<BeanModel> be) {
 
 				EventType type = ClientController.CLIENT_EDIT;
-				ClientJSO client = be.getModel().getBean();
-				Dispatcher.forwardEvent(type, client);
+				List<BeanModel> l = new ArrayList<BeanModel>();
+				l.add(be.getModel());
+				AppEvent event = new AppEvent(type);
+				event.setData("clients", l);
+				event.setData("group", getSelectedGroupItem().getBean());
+				Dispatcher.forwardEvent(event);
 			}
 
 		});
@@ -401,7 +408,7 @@ public class ClientWindow extends Window {
 		final Menu installMenu = new Menu();
 		final SelectionListener<? extends MenuEvent> installListener = new InstalaceMenuListener();
 
-		ClientService service = ClientService.getInstance();
+		InstalationService service = InstalationService.getInstance();
 		service.listInstalations(new RemoteRequestCallback<List<InstalaceJSO>>() {
 
 			@Override

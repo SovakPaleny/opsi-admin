@@ -23,10 +23,11 @@ import cz.muni.ucn.opsi.wui.gwt.client.DesktopController;
 import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.event.CometController;
 import cz.muni.ucn.opsi.wui.gwt.client.event.LifecycleEventJSO;
+import cz.muni.ucn.opsi.wui.gwt.client.instalation.InstalaceJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class ClientView extends View {

@@ -13,6 +13,7 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.json.client.JSONObject;
 
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
+import cz.muni.ucn.opsi.wui.gwt.client.instalation.InstalaceJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequest;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
@@ -30,7 +31,6 @@ public class ClientService {
 	private static final String CLIENT_SAVE_URL = "remote/clients/save";
 	private static final String CLIENT_DELETE_URL = "remote/clients/delete";
 	private static final String CLIENT_INSTALL_URL = "remote/clients/install";
-	private static final String CLIENT_INSTALACTION_LIST_URL = "remote/instalation/list";
 	private static final String CLIENT_IMPORT_LIST_URL = "remote/clients/import/list";
 
 	private ClientService() {
@@ -160,23 +160,6 @@ public class ClientService {
 	}
 
 	/**
-	 *
-	 */
-	public void listInstalations(RemoteRequestCallback<List<InstalaceJSO>> callback) {
-		RemoteRequest<List<InstalaceJSO>> request = new RemoteRequest<List<InstalaceJSO>>(RequestBuilder.GET,
-				URL.encode(GWT.getHostPageBaseURL() + CLIENT_INSTALACTION_LIST_URL)) {
-
-			@Override
-			protected List<InstalaceJSO> transformResponse(String text) {
-				return transformInstalation(text);
-			}
-		};
-
-		request.execute(callback);
-
-	}
-
-	/**
 	 * @param client
 	 * @param instalace
 	 * @param remoteRequestCallback
@@ -225,21 +208,6 @@ public class ClientService {
 		request.execute(callback);
 
 
-	}
-
-	/**
-	 * @param text
-	 * @return
-	 */
-	protected List<InstalaceJSO> transformInstalation(String text) {
-
-        JsArray<InstalaceJSO> array = InstalaceJSO.fromJSONArray(text);
-        List<InstalaceJSO> insts = new ArrayList<InstalaceJSO>();
-        for(int i = 0; i < array.length(); i++) {
-                insts.add(array.get(i));
-        }
-
-        return insts;
 	}
 
 	/**

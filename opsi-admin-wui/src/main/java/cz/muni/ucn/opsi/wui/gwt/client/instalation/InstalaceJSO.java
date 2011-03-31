@@ -1,7 +1,7 @@
 /**
  *
  */
-package cz.muni.ucn.opsi.wui.gwt.client.client;
+package cz.muni.ucn.opsi.wui.gwt.client.instalation;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;

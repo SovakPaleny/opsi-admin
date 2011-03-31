@@ -3,10 +3,12 @@
  */
 package cz.muni.ucn.opsi.wui.remote.instalation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +37,20 @@ public class InstalationController {
 	public @ResponseBody List<Instalation> listInstalations() {
 		return instalationService.listInstalations();
 	}
+
+	@RequestMapping(value = "/instalation/listAll", method = RequestMethod.GET)
+	public @ResponseBody List<Instalation> listInstalationsAll() {
+		return instalationService.listInstalationsAll();
+	}
+
+	@RequestMapping(value = "/instalation/save", method = RequestMethod.POST)
+	public @ResponseBody void saveInstalations(@RequestBody InstalationList instalations) {
+		instalationService.saveInstalations(instalations);
+	}
+
+
+	@SuppressWarnings("serial")
+	public static class InstalationList extends ArrayList<Instalation> { }
 
 
 }

@@ -22,7 +22,7 @@ import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class ClientEditView extends View {

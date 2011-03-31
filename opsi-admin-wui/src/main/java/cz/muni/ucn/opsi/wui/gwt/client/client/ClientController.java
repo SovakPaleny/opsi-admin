@@ -11,7 +11,7 @@ import cz.muni.ucn.opsi.wui.gwt.client.event.CometController;
 import cz.muni.ucn.opsi.wui.gwt.client.event.LifecycleEventJSO;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class ClientController extends Controller {

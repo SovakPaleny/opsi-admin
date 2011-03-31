@@ -10,7 +10,7 @@ import cz.muni.ucn.opsi.wui.gwt.client.beanModel.BeanModelTag;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class ClientJSO extends JavaScriptObject implements BeanModelTag {

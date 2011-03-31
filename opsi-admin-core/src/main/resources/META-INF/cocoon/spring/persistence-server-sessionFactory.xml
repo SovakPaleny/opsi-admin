@@ -16,6 +16,7 @@
     	<list>
     		<value>cz.muni.ucn.opsi.core.group.GroupHibernate</value>
     		<value>cz.muni.ucn.opsi.core.client.ClientHibernate</value>
+    		<value>cz.muni.ucn.opsi.core.instalation.InstalationHibernate</value>
     	</list>
     </property>
     <property name="hibernateProperties">

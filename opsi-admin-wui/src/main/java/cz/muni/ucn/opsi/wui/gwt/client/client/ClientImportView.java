@@ -16,7 +16,7 @@ import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupJSO;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class ClientImportView extends View {

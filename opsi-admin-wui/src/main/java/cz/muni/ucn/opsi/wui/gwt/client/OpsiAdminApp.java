@@ -16,6 +16,7 @@ import com.google.gwt.core.client.EntryPoint;
 import cz.muni.ucn.opsi.wui.gwt.client.client.ClientController;
 import cz.muni.ucn.opsi.wui.gwt.client.event.CometController;
 import cz.muni.ucn.opsi.wui.gwt.client.group.GroupController;
+import cz.muni.ucn.opsi.wui.gwt.client.instalation.InstalationController;
 import cz.muni.ucn.opsi.wui.gwt.client.login.LoginController;
 
 public class OpsiAdminApp implements EntryPoint {
@@ -33,6 +34,7 @@ public class OpsiAdminApp implements EntryPoint {
 
 		dispatcher.addController(new GroupController());
 		dispatcher.addController(new ClientController());
+		dispatcher.addController(new InstalationController());
 
 		dispatcher.dispatch(DesktopController.INIT);
 

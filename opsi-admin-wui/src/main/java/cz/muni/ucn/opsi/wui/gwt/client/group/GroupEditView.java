@@ -19,7 +19,7 @@ import cz.muni.ucn.opsi.wui.gwt.client.MessageDialog;
 import cz.muni.ucn.opsi.wui.gwt.client.remote.RemoteRequestCallback;
 
 /**
- * @author dosoudilj
+ * @author Jan Dosoudil
  *
  */
 public class GroupEditView extends View {

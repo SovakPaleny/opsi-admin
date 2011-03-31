@@ -20,4 +20,17 @@ public class MessageDialog {
 			public void handleEvent(MessageBoxEvent be) {
 			}});
 	}
+
+	/**
+	 * @param string
+	 */
+	public static void showMessage(String title, String message) {
+		MessageBox.info(title, message, new Listener<MessageBoxEvent>(){
+
+			@Override
+			public void handleEvent(MessageBoxEvent be) {
+			}
+
+		});
+	}
 }
