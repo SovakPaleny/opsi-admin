@@ -258,7 +258,7 @@
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<spring.security.version>3.0.3.RELEASE</spring.security.version>
 		<eis.core.version>0.5.0-SNAPSHOT</eis.core.version>
-		<gwt.version>2.1.0</gwt.version>
+		<gwt.version>2.2.0</gwt.version>
 		<jackson.version>1.6.1</jackson.version>
 		<hibernate.version>3.6.0.Final</hibernate.version>
 		<hibernate-search.version>3.3.0.CR2</hibernate-search.version>
