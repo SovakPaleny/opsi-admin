@@ -2936,7 +2936,7 @@ a.x-grid3-hd-btn:hover {
 }
 
 .x-grid3-footer-row {
-  border-top: 1px solid #EEEEEE;
+  border: 1px solid #EEEEEE;
   background-color: #f7f7f7;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -2988,6 +2988,10 @@ a.x-grid3-hd-btn:hover {
 .x-grid3-hd-row .x-filtered-column {
   font-style: italic !important;
   font-weight: bold !important;
+}
+
+.ext-strict .ext-gecko .x-inline-editor .x-small-editor .x-form-text {
+  height: 18px !important;
 }
 .x-dd-drag-proxy{
 	position:absolute;
@@ -6820,6 +6824,10 @@ td.x-grid3-hd-over .x-grid3-hd-inner,td.sort-desc .x-grid3-hd-inner,td.sort-asc 
 
 .x-row-editor .x-btns .x-plain-body {
   background: transparent url(../images/gxt/grid/row-editor-btns.gif) repeat-x 0 -62px;
+}
+
+.x-inserted-row {
+  background-color: #f7f9cc
 }.x-dd-drag-ghost{
 	color:#000;
 	font: normal 11px arial, helvetica, sans-serif;

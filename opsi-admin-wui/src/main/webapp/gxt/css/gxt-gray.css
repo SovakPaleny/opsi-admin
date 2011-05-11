@@ -343,6 +343,9 @@ ul.x-tab-strip-bottom{
     border:1px solid #d0d0d0;
     background:#e8e8e8;
 }
+.ext-ie .x-window-plain .x-window-mc {
+    background-color: #e3e3e3;
+}
 
 .x-window-ml {
 	background-image:url(../images/gray/window/left-right.png);
