@@ -17,6 +17,7 @@ public class Client extends ValueObject {
 
 	private String name;
 	private String description;
+	private String notes;
 	private String ipAddress;
 	private String macAddress;
 	private Group group;
@@ -105,7 +106,19 @@ public class Client extends ValueObject {
 		this.group = group;
 	}
 
+	/**
+	 * @return the notes
+	 */
+	public String getNotes() {
+		return notes;
+	}
 
+	/**
+	 * @param notes the notes to set
+	 */
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
 
 
 }

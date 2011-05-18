@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.muni.ucn.opsi.api.client.Client;
 import cz.muni.ucn.opsi.api.client.ClientService;
+import cz.muni.ucn.opsi.api.client.Hardware;
 import cz.muni.ucn.opsi.api.instalation.Instalation;
 import cz.muni.ucn.opsi.api.instalation.InstalationService;
 
@@ -98,5 +99,10 @@ public class ClientController {
 	@RequestMapping(value = "/clients/import/list", method = RequestMethod.GET)
 	public @ResponseBody List<Client> listClientsForImport(@RequestParam String groupUuid) {
 		return clientService.listClientsForImport(UUID.fromString(groupUuid));
+	}
+
+	@RequestMapping(value = "/clients/hardware/list", method = RequestMethod.GET)
+	public @ResponseBody List<Hardware> listHardware(@RequestParam String uuid) {
+		return clientService.listHardare(UUID.fromString(uuid));
 	}
 }

@@ -14,6 +14,8 @@ public interface ClientConstants extends Constants {
 	String getName();
 	@Key("client.description")
 	String getDescription();
+	@Key("client.notes")
+	String getNotes();
 	@Key("client.ipAddress")
 	String getIpAddress();
 	@Key("client.macAddress")

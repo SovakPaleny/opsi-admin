@@ -91,7 +91,7 @@ public class ClientWindow extends Window {
 		setMinimizable(true);
 		setMaximizable(true);
 		setHeading("Správa klientů");
-		setSize(840, 400);
+		setSize(900, 400);
 		setLayout(new FitLayout());
 
 		ToolBar toolbar = createToolbar();
@@ -245,7 +245,8 @@ public class ClientWindow extends Window {
 		});
 
 		ColumnConfig name = new ColumnConfig("name", clientConstants.getName(), 180);
-		ColumnConfig description = new ColumnConfig("description", clientConstants.getDescription(), 180);
+		ColumnConfig description = new ColumnConfig("description", clientConstants.getDescription(), 80);
+		ColumnConfig notes = new ColumnConfig("notes", clientConstants.getNotes(), 180);
 		ColumnConfig macAddress = new ColumnConfig("macAddress", clientConstants.getMacAddress(), 140);
 		ColumnConfig ipAddress = new ColumnConfig("ipAddress", clientConstants.getIpAddress(), 80);
 
@@ -255,8 +256,9 @@ public class ClientWindow extends Window {
 
 		config.add(sm.getColumn());
 		config.add(name);
-		config.add(description);
 		config.add(macAddress);
+		config.add(description);
+		config.add(notes);
 		config.add(ipAddress);
 
 		final ColumnModel cm = new ColumnModel(config);

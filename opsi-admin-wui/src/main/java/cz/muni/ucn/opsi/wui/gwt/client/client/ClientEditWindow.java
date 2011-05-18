@@ -19,6 +19,7 @@ import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FitData;
@@ -65,7 +66,7 @@ public class ClientEditWindow extends Window {
 		setIcon(IconHelper.createStyle("icon-grid"));
 		setMinimizable(true);
 		setMaximizable(true);
-		setSize(400, 200);
+		setSize(400, 260);
 //		setBodyStyle("padding: 0px; ");
 
 //		FormLayout layout = new FormLayout();
@@ -164,6 +165,13 @@ public class ClientEditWindow extends Window {
 
 			@Override
 			public String validate(Field<?> field, String value) {
+				value = value.replaceAll("[.\\- \\,]", ":");
+				if (value.matches("^([0-9a-fA-F]{1,2}){6}$")) {
+					value = value.replaceFirst("^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$",
+							"$1:$2:$3:$4:$5:$6");
+				}
+				field.setRawValue(value);
+
 				if (value.matches("^([0-9a-fA-F]{1,2}:){5}([0-9a-fA-F]{1,2})$")) {
 					return null;
 				}
@@ -171,6 +179,12 @@ public class ClientEditWindow extends Window {
 			}
 		});
 		formPanel.add(macAddress, new FormData(FIELD_SPEC));
+
+		TextArea notes = new TextArea();
+		notes.setName("notes");
+		notes.setFieldLabel(clientConstants.getNotes());
+		formPanel.add(notes, new FormData(FIELD_SPEC));
+
 
 
 		add(form, new FitData());

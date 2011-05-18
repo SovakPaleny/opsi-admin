@@ -132,6 +132,7 @@ public class ClientDaoHibernate implements ClientDao {
 		c.setUuid(clientH.getUuid());
 		c.setName(clientH.getName());
 		c.setDescription(clientH.getDescription());
+		c.setNotes(clientH.getNotes());
 		c.setIpAddress(clientH.getIpAddress());
 		c.setMacAddress(clientH.getMacAddress());
 
@@ -179,6 +180,7 @@ public class ClientDaoHibernate implements ClientDao {
 		toSave.setDescription(client.getDescription());
 		toSave.setIpAddress(client.getIpAddress());
 		toSave.setMacAddress(client.getMacAddress());
+		toSave.setNotes(client.getNotes());
 
 		GroupHibernate groupH = (GroupHibernate) session.load(GroupHibernate.class, client.getGroup().getUuid());
 		toSave.setGroup(groupH);

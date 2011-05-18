@@ -40,6 +40,7 @@ import org.springframework.http.converter.json.MappingJacksonHttpMessageConverte
 import org.springframework.web.client.RestTemplate;
 
 import cz.muni.ucn.opsi.api.client.Client;
+import cz.muni.ucn.opsi.api.client.Hardware;
 import cz.muni.ucn.opsi.api.instalation.Instalation;
 import cz.muni.ucn.opsi.api.opsiClient.OpsiClientService;
 
@@ -141,7 +142,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		String hostname = name.substring(0, indexOf);
 		String domainname = name.substring(indexOf + 1);
 		String description = client.getDescription();
-		String notes = "";
+		String notes = client.getNotes();
 		String ipaddress = client.getIpAddress();
 		String macaddress = client.getMacAddress();
 
@@ -171,8 +172,12 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 		if (null == description) {
 			description = "";
 		}
+		String notes = client.getNotes();
+		if (null == notes) {
+			notes = "";
+		}
 		callOpsi("setHostDescription", client.getName(), description);
-//		callOpsi("setHostNotes", client.getName(), client.getIpAddress());
+		callOpsi("setHostNotes", client.getName(), notes);
 	}
 
 	/* (non-Javadoc)
@@ -249,6 +254,7 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 			Client c = new Client(UUID.randomUUID());
 			c.setName(map.get("hostId"));
 			c.setDescription(map.get("description"));
+			c.setNotes(map.get("notes"));
 
 			String macAddress = map.get("hardwareAddress");
 			if (StringUtils.isBlank(macAddress)) {
@@ -266,6 +272,19 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 
 		return ret;
 	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.opsiClient.OpsiClientService#listHardware(cz.muni.ucn.opsi.api.client.Client)
+	 */
+	@Override
+	public List<Hardware> listHardware(Client client) {
+		OpsiResponse response = callOpsi("getHardwareInformation_listOfHashes");
+
+		List<Hardware> hw = new ArrayList<Hardware>();
+		return hw;
+	}
+
+
 
 	/**
 	 * @return

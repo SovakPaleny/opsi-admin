@@ -6,6 +6,7 @@ package cz.muni.ucn.opsi.api.opsiClient;
 import java.util.List;
 
 import cz.muni.ucn.opsi.api.client.Client;
+import cz.muni.ucn.opsi.api.client.Hardware;
 import cz.muni.ucn.opsi.api.instalation.Instalation;
 
 /**
@@ -50,5 +51,11 @@ public interface OpsiClientService {
 	 * @return
 	 */
 	List<Client> listClientsForImport();
+
+	/**
+	 * @param client
+	 * @return
+	 */
+	List<Hardware> listHardware(Client client);
 
 }

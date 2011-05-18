@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cz.muni.ucn.opsi.api.client.Client;
 import cz.muni.ucn.opsi.api.client.ClientService;
+import cz.muni.ucn.opsi.api.client.Hardware;
 import cz.muni.ucn.opsi.api.group.Group;
 import cz.muni.ucn.opsi.api.group.GroupService;
 import cz.muni.ucn.opsi.api.instalation.Instalation;
@@ -163,6 +164,15 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 			ret.add(client);
 		}
 		return ret;
+	}
+
+	/* (non-Javadoc)
+	 * @see cz.muni.ucn.opsi.api.client.ClientService#listHardare(java.util.UUID)
+	 */
+	@Override
+	public List<Hardware> listHardare(UUID uuid) {
+		Client client = clientDao.get(uuid);
+		return opsiClientService.listHardware(client);
 	}
 
 	protected void checkGroupRights(Group group) {

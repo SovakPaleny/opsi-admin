@@ -32,6 +32,7 @@ public class ClientService {
 	private static final String CLIENT_DELETE_URL = "remote/clients/delete";
 	private static final String CLIENT_INSTALL_URL = "remote/clients/install";
 	private static final String CLIENT_IMPORT_LIST_URL = "remote/clients/import/list";
+	private static final String CLIENT_HARDWARE_URL = "remote/clients/hardware/list";
 
 	private ClientService() {
 	}
@@ -211,6 +212,27 @@ public class ClientService {
 	}
 
 	/**
+	 * @param client
+	 * @param remoteRequestCallback
+	 */
+	public void listHardware(ClientJSO client,
+			RemoteRequestCallback<List<HardwareJSO>> callback) {
+
+		RemoteRequest<List<HardwareJSO>> request = new RemoteRequest<List<HardwareJSO>>(RequestBuilder.GET,
+				URL.encode(GWT.getHostPageBaseURL() + CLIENT_HARDWARE_URL) +
+				"?uuid=" + URL.encodeQueryString(client.getUuid())) {
+
+			@Override
+			protected List<HardwareJSO> transformResponse(String text) {
+				return transformArrayHardware(text);
+			}
+		};
+
+		request.execute(callback);
+
+	}
+
+	/**
 	 * @param text
 	 * @return
 	 */
@@ -221,6 +243,19 @@ public class ClientService {
                 users.add(array.get(i));
         }
         return users;
+	}
+
+	/**
+	 * @param text
+	 * @return
+	 */
+	protected List<HardwareJSO> transformArrayHardware(String text) {
+		JsArray<HardwareJSO> array = HardwareJSO.fromJSONArray(text);
+		List<HardwareJSO> users = new ArrayList<HardwareJSO>();
+		for(int i = 0; i < array.length(); i++) {
+			users.add(array.get(i));
+		}
+		return users;
 	}
 
     /**

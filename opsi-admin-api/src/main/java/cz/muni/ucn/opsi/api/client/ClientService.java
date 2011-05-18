@@ -62,4 +62,10 @@ public interface ClientService {
 	@Secured("ROLE_ADMIN")
 	List<Client> listClientsForImport(UUID groupUuid);
 
+	/**
+	 * @param uuid
+	 * @return
+	 */
+	List<Hardware> listHardare(UUID uuid);
+
 }

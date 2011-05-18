@@ -19,6 +19,7 @@ public class ClientJSO extends JavaScriptObject implements BeanModelTag {
 	private String uuid;
 	private String name;
 	private String description;
+	private String notes;
 	private String ipAddress;
 	private String macAddress;
 	private GroupJSO group;
@@ -66,6 +67,20 @@ public class ClientJSO extends JavaScriptObject implements BeanModelTag {
 	 */
 	public final native void setDescription(String description) /*-{
 		this.description = description;
+	}-*/;
+
+	/**
+	 * @return the notes
+	 */
+	public final native String getNotes() /*-{
+		return this.notes;
+	}-*/;
+
+	/**
+	 * @param description the notes to set
+	 */
+	public final native void setNotes(String notes) /*-{
+		this.notes = notes;
 	}-*/;
 
 	/**

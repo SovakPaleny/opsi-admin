@@ -10,8 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 
 import cz.muni.ucn.opsi.core.client.ClientHibernate;
@@ -22,7 +22,7 @@ import cz.u2.eis.valueObjects.hibernate.HibernateValueObject;
  *
  */
 @Entity(name="Group")
-@Table(name="GROUPS")
+@Table(name="GROUPS", uniqueConstraints={@UniqueConstraint(columnNames="name", name="u_name")})
 public class GroupHibernate extends HibernateValueObject {
 	private static final long serialVersionUID = 3151715438105784467L;
 
@@ -46,7 +46,6 @@ public class GroupHibernate extends HibernateValueObject {
 	/**
 	 * @return the name
 	 */
-	@NaturalId
 	@Length(min=1, max=50)
 	@Column(length=50)
 	public String getName() {

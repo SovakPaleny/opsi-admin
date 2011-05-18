@@ -29,6 +29,7 @@ public class ClientHibernate extends HibernateValueObject {
 
 	private String name;
 	private String description;
+	private String notes;
 	private String ipAddress;
 	private String macAddress;
 	private GroupHibernate group;
@@ -75,6 +76,20 @@ public class ClientHibernate extends HibernateValueObject {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	/**
+	 * @return the notes
+	 */
+	@Length(max=250)
+	@Column(length=250)
+	public String getNotes() {
+		return notes;
+	}
+	/**
+	 * @param notes the notes to set
+	 */
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 	/**
 	 * @return the ipAddress
