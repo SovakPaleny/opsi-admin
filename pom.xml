@@ -236,6 +236,12 @@
 				<version>1.0.0.GA</version>
 			</dependency>
 			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+				<classifier>sources</classifier>
+			</dependency>
+			<dependency>
 				<groupId>net.sf.dozer</groupId>
 				<artifactId>dozer</artifactId>
 				<version>5.3.0</version>
@@ -258,7 +264,7 @@
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<spring.security.version>3.0.3.RELEASE</spring.security.version>
 		<eis.core.version>0.5.0-SNAPSHOT</eis.core.version>
-		<gwt.version>2.2.0</gwt.version>
+		<gwt.version>2.3.0</gwt.version>
 		<jackson.version>1.6.1</jackson.version>
 		<hibernate.version>3.6.0.Final</hibernate.version>
 		<hibernate-search.version>3.3.0.CR2</hibernate-search.version>
