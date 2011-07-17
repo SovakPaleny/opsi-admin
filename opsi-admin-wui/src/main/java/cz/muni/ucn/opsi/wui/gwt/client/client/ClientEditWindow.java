@@ -9,6 +9,8 @@ import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.binding.FormBinding;
 import com.extjs.gxt.ui.client.data.BeanModel;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -161,18 +163,28 @@ public class ClientEditWindow extends Window {
 		TextField<String> macAddress = new TextField<String>();
 		macAddress.setName("macAddress");
 		macAddress.setFieldLabel(clientConstants.getMacAddress());
+		macAddress.addListener(Events.Change, new Listener<FieldEvent>() {
+
+			@Override
+			public void handleEvent(FieldEvent fe) {
+
+				@SuppressWarnings("unchecked")
+				TextField<String> field = (TextField<String>) fe.getField();
+				String value = field.getValue();
+				value = value.replaceAll("[.\\- \\,]", ":");
+				if (value.matches("^(\\p{XDigit}{2}){6}$")) {
+					value = value.replaceFirst("^(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})(\\p{XDigit}{2})$",
+							"$1:$2:$3:$4:$5:$6");
+				}
+				field.setValue(value);
+				fe.cancelBubble();
+			}
+		});
 		macAddress.setValidator(new Validator() {
 
 			@Override
 			public String validate(Field<?> field, String value) {
-				value = value.replaceAll("[.\\- \\,]", ":");
-				if (value.matches("^([0-9a-fA-F]{1,2}){6}$")) {
-					value = value.replaceFirst("^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$",
-							"$1:$2:$3:$4:$5:$6");
-				}
-				field.setRawValue(value);
-
-				if (value.matches("^([0-9a-fA-F]{1,2}:){5}([0-9a-fA-F]{1,2})$")) {
+				if (value.matches("^(\\p{XDigit}{1,2}:){5}(\\p{XDigit}{1,2})$")) {
 					return null;
 				}
 				return "Zadejte platnou MAC adresu ve tvaru 01:23:45:67:89:ab";
