@@ -367,6 +367,7 @@ public class ClientWindow extends Window {
 	 */
 	private ToolBar createToolbar() {
 		SelectionListener<ButtonEvent> buttonListener = new ToolbarButtonListener();
+		GridContextMenuListener menuListener = new GridContextMenuListener();
 
 		ToolBar toolbar = new ToolBar();
 
@@ -397,12 +398,33 @@ public class ClientWindow extends Window {
 		buttonInstall.setMenu(createInstallMenu());
 		toolbar.add(buttonInstall);
 
+//		buttonImport = new Button(clientConstants.getClientImport());
+//		buttonImport.setIcon(IconHelper.createStyle("import"));
+//		buttonImport.setData("event", ClientController.CLIENT_IMPORT);
+//		buttonImport.addSelectionListener(buttonListener);
+//		buttonImport.disable();
+//		toolbar.add(buttonImport);
+
 		buttonImport = new Button(clientConstants.getClientImport());
 		buttonImport.setIcon(IconHelper.createStyle("import"));
-		buttonImport.setData("event", ClientController.CLIENT_IMPORT);
-		buttonImport.addSelectionListener(buttonListener);
 		buttonImport.disable();
 		toolbar.add(buttonImport);
+
+		final Menu importMenu = new Menu();
+
+		MenuItem importOpsi = new MenuItem(clientConstants.getClientImportOpsi());
+		importOpsi.setIcon(IconHelper.createStyle("import"));
+		importOpsi.setData("event", ClientController.CLIENT_IMPORT);
+		importOpsi.addSelectionListener(menuListener);
+		importMenu.add(importOpsi);
+
+		MenuItem importCSV = new MenuItem(clientConstants.getClientImportCSV());
+		importCSV.setIcon(IconHelper.createStyle("import"));
+		importCSV.setData("event", ClientController.CLIENT_IMPORT_CSV);
+		importCSV.addSelectionListener(menuListener);
+		importMenu.add(importCSV);
+
+		buttonImport.setMenu(importMenu);
 
 
 		return toolbar;

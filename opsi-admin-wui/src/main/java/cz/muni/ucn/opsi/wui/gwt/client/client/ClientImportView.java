@@ -35,9 +35,13 @@ public class ClientImportView extends View {
 	protected void handleEvent(AppEvent event) {
 		EventType type = event.getType();
 		GroupJSO group = (GroupJSO) event.getData("group");
-		if (ClientController.CLIENT_IMPORT == type) {
+		if (getWindowEventType() == type) {
 			clientImport(group);
 		}
+	}
+
+	public EventType getWindowEventType() {
+		return ClientController.CLIENT_IMPORT;
 	}
 
 	/**
@@ -81,7 +85,7 @@ public class ClientImportView extends View {
 	 * @param newGroup
 	 * @return
 	 */
-	private ClientImportWindow createWindow(GroupJSO group) {
+	protected ClientImportWindow createWindow(GroupJSO group) {
 		return new ClientImportWindow(group);
 	}
 

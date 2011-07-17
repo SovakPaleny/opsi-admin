@@ -44,9 +44,9 @@ public class ClientImportWindow extends Window {
 //	private FormPanel form;
 
 	private GroupJSO group;
-	private ListStore<BeanModel> clientStore;
-	private Grid<BeanModel> clientsGrid;
-	private BeanModelFactory clientFactory;
+	protected ListStore<BeanModel> clientStore;
+	protected Grid<BeanModel> clientsGrid;
+	protected BeanModelFactory clientFactory;
 
 	private int importCount = 0;
 
@@ -133,6 +133,22 @@ public class ClientImportWindow extends Window {
 
 		clientsGrid.mask(GXT.MESSAGES.loadMask_msg());
 
+
+
+
+		generateButtons();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.extjs.gxt.ui.client.widget.Component#onLoad()
+	 */
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		loadData();
+	}
+
+	protected void loadData() {
 		ClientService clientService = ClientService.getInstance();
 
 		clientService.listClientsForImport(this.group, new RemoteRequestCallback<List<ClientJSO>>() {
@@ -151,10 +167,6 @@ public class ClientImportWindow extends Window {
 				clientsGrid.unmask();
 			}
 		});
-
-
-
-		generateButtons();
 	}
 
 	/**

@@ -22,11 +22,13 @@ public class ClientController extends Controller {
 	public static final EventType CLIENT_DELETE = new EventType();
 	public static final EventType CLIENT_INSTALL = new EventType();
 	public static final EventType CLIENT_IMPORT = new EventType();
+	public static final EventType CLIENT_IMPORT_CSV = new EventType();
 	public static final EventType CLIENT_HARDWARE = new EventType();
 
 	private ClientView clientView;
 	private ClientEditView clientEditView;
 	private ClientImportView clientImportView;
+	private ClientImportCSVView clientImportCSVView;
 	private ClientHardwareView clientHardwareView;
 
 	/**
@@ -39,6 +41,7 @@ public class ClientController extends Controller {
 		registerEventTypes(ClientController.CLIENT_DELETE);
 		registerEventTypes(ClientController.CLIENT_INSTALL);
 		registerEventTypes(ClientController.CLIENT_IMPORT);
+		registerEventTypes(ClientController.CLIENT_IMPORT_CSV);
 		registerEventTypes(ClientController.CLIENT_HARDWARE);
 		registerEventTypes(CometController.LIFECYCLE_EVENT_TYPE);
 	}
@@ -61,6 +64,8 @@ public class ClientController extends Controller {
 			clientInstall(event);
 		} else if (ClientController.CLIENT_IMPORT == type) {
 			clientImport(event);
+		} else if (ClientController.CLIENT_IMPORT_CSV == type) {
+			clientImportCSV(event);
 		} else if (ClientController.CLIENT_HARDWARE == type) {
 			clientHardware(event);
 		} else if (CometController.LIFECYCLE_EVENT_TYPE == type) {
@@ -77,6 +82,7 @@ public class ClientController extends Controller {
 		clientView = new ClientView(this);
 		clientEditView = new ClientEditView(this);
 		clientImportView = new ClientImportView(this);
+		clientImportCSVView = new ClientImportCSVView(this);
 		clientHardwareView = new ClientHardwareView(this);
 	}
 
@@ -120,6 +126,13 @@ public class ClientController extends Controller {
 	 */
 	private void clientImport(AppEvent event) {
 		forwardToView(clientImportView, event);
+	}
+
+	/**
+	 * @param event
+	 */
+	private void clientImportCSV(AppEvent event) {
+		forwardToView(clientImportCSVView, event);
 	}
 
 	/**
