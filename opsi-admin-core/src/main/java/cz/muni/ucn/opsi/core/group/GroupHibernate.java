@@ -60,8 +60,8 @@ public class GroupHibernate extends HibernateValueObject {
 	/**
 	 * @return the role
 	 */
-	@Length(max=20)
-	@Column(length=20)
+	@Length(max=50)
+	@Column(length=50)
 	public String getRole() {
 		return role;
 	}
