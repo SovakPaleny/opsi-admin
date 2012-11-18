@@ -18,6 +18,7 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.GridEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
+import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -26,6 +27,7 @@ import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.IconHelper;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
@@ -598,15 +600,27 @@ public class ClientWindow extends Window {
 	private final class InstalaceMenuListener extends	SelectionListener<MenuEvent> {
 		@Override
 		public void componentSelected(MenuEvent ce) {
-			EventType type = ce.getItem().getData("event");
-			InstalaceJSO instalace = ce.getItem().getData("instalace");
+			final EventType type = ce.getItem().getData("event");
+			final InstalaceJSO instalace = ce.getItem().getData("instalace");
 
-			List<BeanModel> clients = clientsGrid.getSelectionModel().getSelectedItems();
-			AppEvent event = new AppEvent(type);
-			event.setData("clients", clients);
-			event.setData("instalace", instalace);
-			event.setData("group", getSelectedGroupItem().getBean());
-			Dispatcher.forwardEvent(event);
+			MessageBox.confirm("Provést instalaci?",
+					"Opravdu provést instalaci? <br />" + instalace.getName(),
+					new Listener<MessageBoxEvent>() {
+
+						@Override
+						public void handleEvent(MessageBoxEvent be) {
+							List<BeanModel> clients = clientsGrid.getSelectionModel().getSelectedItems();
+							AppEvent event = new AppEvent(type);
+							event.setData("clients", clients);
+							event.setData("instalace", instalace);
+							event.setData("group", getSelectedGroupItem().getBean());
+							Dispatcher.forwardEvent(event);
+
+						}
+
+			});
+
+
 		}
 	}
 
