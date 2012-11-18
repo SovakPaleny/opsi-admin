@@ -597,19 +597,20 @@ public class ClientWindow extends Window {
 	 * @author Jan Dosoudil
 	 *
 	 */
-	private final class InstalaceMenuListener extends	SelectionListener<MenuEvent> {
+	private final class InstalaceMenuListener extends SelectionListener<MenuEvent> {
 		@Override
 		public void componentSelected(MenuEvent ce) {
 			final EventType type = ce.getItem().getData("event");
 			final InstalaceJSO instalace = ce.getItem().getData("instalace");
+			final List<BeanModel> clients = clientsGrid.getSelectionModel().getSelectedItems();
 
 			MessageBox.confirm("Provést instalaci?",
-					"Opravdu provést instalaci? <br />" + instalace.getName(),
+					"Opravdu provést instalaci " + instalace.getName() +
+					" na " + clients.size() + " počítačů?" ,
 					new Listener<MessageBoxEvent>() {
 
 						@Override
 						public void handleEvent(MessageBoxEvent be) {
-							List<BeanModel> clients = clientsGrid.getSelectionModel().getSelectedItems();
 							AppEvent event = new AppEvent(type);
 							event.setData("clients", clients);
 							event.setData("instalace", instalace);
