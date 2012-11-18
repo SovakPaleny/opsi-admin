@@ -300,6 +300,13 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 	 * @return
 	 */
 	protected OpsiResponse callOpsi(String method, Object... args) {
+		for (int i = 0; i < args.length; i++) {
+			if (!(args[i] instanceof String)) {
+				continue;
+			}
+			args[i] = sanityString((String) args[i]);
+		}
+
 		OpsiRequest requestProds = new OpsiRequest();
 		requestProds.setParams(Arrays.asList(args));
 		requestProds.setId(getRequestId());
@@ -321,6 +328,16 @@ public class OpsiClientServiceImpl implements OpsiClientService, InitializingBea
 			return response;
 		}
 	}
+
+	/**
+	 * @param object
+	 * @return
+	 */
+	private String sanityString(String s) {
+		return StringUtils.replace(s, "\r", "");
+	}
+
+
 
 	/* (non-Javadoc)
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
