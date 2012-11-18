@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>cz.u2.eis</groupId>
 		<artifactId>eis</artifactId>
-		<version>0.5.4-SNAPSHOT</version>
+		<version>0.5.4</version>
 	</parent>
 	<modules>
 		<module>opsi-admin-api</module>
@@ -268,7 +268,7 @@
 	<properties>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<spring.security.version>3.0.3.RELEASE</spring.security.version>
-		<eis.core.version>0.5.4-SNAPSHOT</eis.core.version>
+		<eis.core.version>0.5.4</eis.core.version>
 		<gwt.version>2.3.0</gwt.version>
 		<jackson.version>1.6.1</jackson.version>
 		<hibernate.version>3.6.0.Final</hibernate.version>
