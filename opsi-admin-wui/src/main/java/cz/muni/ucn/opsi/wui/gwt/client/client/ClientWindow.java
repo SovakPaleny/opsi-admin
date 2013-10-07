@@ -27,6 +27,7 @@ import com.extjs.gxt.ui.client.mvc.Dispatcher;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.IconHelper;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.Dialog;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -611,6 +612,12 @@ public class ClientWindow extends Window {
 
 						@Override
 						public void handleEvent(MessageBoxEvent be) {
+							if (be.getButtonClicked() == null) {
+								return;
+							}
+							if (!Dialog.YES.equals(be.getButtonClicked().getItemId())) {
+								return;
+							}
 							AppEvent event = new AppEvent(type);
 							event.setData("clients", clients);
 							event.setData("instalace", instalace);
