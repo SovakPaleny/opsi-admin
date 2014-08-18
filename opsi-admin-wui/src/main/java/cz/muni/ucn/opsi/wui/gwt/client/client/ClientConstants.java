@@ -32,6 +32,8 @@ public interface ClientConstants extends Constants {
 	String getClientImport();
 	@Key("client.clientImportOpsi")
 	String getClientImportOpsi();
+	@Key("client.clientImportOpsi2")
+	String getClientImportOpsi2();
 	@Key("client.clientImportCSV")
 	String getClientImportCSV();
 }

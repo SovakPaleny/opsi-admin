@@ -36,23 +36,29 @@ public class ClientImportView extends View {
 		EventType type = event.getType();
 		GroupJSO group = (GroupJSO) event.getData("group");
 		if (getWindowEventType() == type) {
-			clientImport(group);
+			clientImport(group, true);
+		} else if (getWindowEventType2() == type) {
+			clientImport(group, false);
 		}
 	}
 
 	public EventType getWindowEventType() {
 		return ClientController.CLIENT_IMPORT;
 	}
+	public EventType getWindowEventType2() {
+		return ClientController.CLIENT_IMPORT2;
+	}
 
 	/**
 	 * @param group
+	 * @param master 
 	 */
-	private void clientImport(final GroupJSO group) {
+	private void clientImport(final GroupJSO group, final boolean master) {
 		GWT.runAsync(new RunAsyncCallback() {
 
 			@Override
 			public void onSuccess() {
-				importClientAsync(group);
+				importClientAsync(group, master);
 			}
 
 			@Override
@@ -65,28 +71,31 @@ public class ClientImportView extends View {
 
 	/**
 	 * @param group
+	 * @param master 
 	 */
-	protected void importClientAsync(GroupJSO group) {
-		importGroupWindow(group);
+	protected void importClientAsync(GroupJSO group, boolean master) {
+		importGroupWindow(group, master);
 	}
 
 	/**
+	 * @param master 
 	 * @param client
 	 * @param b
 	 */
-	protected void importGroupWindow(GroupJSO group) {
-		ClientImportWindow w = createWindow(group);
+	protected void importGroupWindow(GroupJSO group, boolean master) {
+		ClientImportWindow w = createWindow(group, master);
 		Dispatcher.forwardEvent(DesktopController.WINDOW_CREATED, w);
 		w.show();
 	}
 
 	/**
 	 * @param group
+	 * @param master 
 	 * @param newGroup
 	 * @return
 	 */
-	protected ClientImportWindow createWindow(GroupJSO group) {
-		return new ClientImportWindow(group);
+	protected ClientImportWindow createWindow(GroupJSO group, boolean master) {
+		return new ClientImportWindow(group, master);
 	}
 
 }

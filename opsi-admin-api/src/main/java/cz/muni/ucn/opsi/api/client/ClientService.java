@@ -56,11 +56,12 @@ public interface ClientService {
 	void installClient(Client client, Instalation i);
 
 	/**
+	 * @param opsi 
 	 * @param fromString
 	 * @return
 	 */
 	@Secured("ROLE_ADMIN")
-	List<Client> listClientsForImport(UUID groupUuid);
+	List<Client> listClientsForImport(UUID groupUuid, String opsi);
 
 	/**
 	 * @param uuid

@@ -12,10 +12,17 @@
 
 	<context:component-scan base-package="cz.muni.ucn.opsi.core" />
 
-	<bean id="opsiClientService" class="cz.muni.ucn.opsi.core.opsiClient.OpsiClientServiceImpl">
+	<bean id="opsiClientService" class="cz.muni.ucn.opsi.core.opsiClient.OpsiClientServiceImpl" primary="true">
 		<property name="opsiUrl" value="${opsi.rpc.url}"/>
 		<property name="userName" value="${opsi.user}"/>
 		<property name="password" value="${opsi.password}"/>
+	</bean>
+
+	<bean id="opsiClientService2" class="cz.muni.ucn.opsi.core.opsiClient.OpsiClientServiceImpl">
+        <qualifier value="opsi2"/>
+		<property name="opsiUrl" value="${opsi2.rpc.url}"/>
+		<property name="userName" value="${opsi2.user}"/>
+		<property name="password" value="${opsi2.password}"/>
 	</bean>
 
 <!--

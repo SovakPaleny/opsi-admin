@@ -24,7 +24,7 @@ public class ClientImportCSVWindow extends  ClientImportWindow {
 	 * @param group
 	 */
 	public ClientImportCSVWindow(GroupJSO group, String data) {
-		super(group);
+		super(group, true);
 		this.data = data;
 	}
 

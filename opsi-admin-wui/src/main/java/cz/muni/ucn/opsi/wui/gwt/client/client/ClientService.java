@@ -191,14 +191,16 @@ public class ClientService {
 	}
 
 	/**
+	 * @param master 
 	 * @param remoteRequestCallback
 	 */
 	public void listClientsForImport(GroupJSO group,
-			RemoteRequestCallback<List<ClientJSO>> callback) {
+			boolean master, RemoteRequestCallback<List<ClientJSO>> callback) {
 
 		RemoteRequest<List<ClientJSO>> request = new RemoteRequest<List<ClientJSO>>(RequestBuilder.GET,
 				URL.encode(GWT.getHostPageBaseURL() + CLIENT_IMPORT_LIST_URL) +
-				"?groupUuid=" + URL.encodeQueryString(group.getUuid())) {
+				"?groupUuid=" + URL.encodeQueryString(group.getUuid()) +
+				"&opsi=" + (master ? "0" : "1" )) {
 
 			@Override
 			protected List<ClientJSO> transformResponse(String text) {

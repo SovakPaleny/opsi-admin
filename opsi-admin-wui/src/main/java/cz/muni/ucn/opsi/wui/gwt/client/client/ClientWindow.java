@@ -421,6 +421,12 @@ public class ClientWindow extends Window {
 		importOpsi.addSelectionListener(menuListener);
 		importMenu.add(importOpsi);
 
+		MenuItem importOpsi2 = new MenuItem(clientConstants.getClientImportOpsi2());
+		importOpsi2.setIcon(IconHelper.createStyle("import"));
+		importOpsi2.setData("event", ClientController.CLIENT_IMPORT2);
+		importOpsi2.addSelectionListener(menuListener);
+		importMenu.add(importOpsi2);
+		
 		MenuItem importCSV = new MenuItem(clientConstants.getClientImportCSV());
 		importCSV.setIcon(IconHelper.createStyle("import"));
 		importCSV.setData("event", ClientController.CLIENT_IMPORT_CSV);

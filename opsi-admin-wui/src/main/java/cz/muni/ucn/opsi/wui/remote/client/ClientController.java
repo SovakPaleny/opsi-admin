@@ -113,8 +113,9 @@ public class ClientController {
 	}
 
 	@RequestMapping(value = "/clients/import/list", method = RequestMethod.GET)
-	public @ResponseBody List<Client> listClientsForImport(@RequestParam String groupUuid) {
-		return clientService.listClientsForImport(UUID.fromString(groupUuid));
+	public @ResponseBody List<Client> listClientsForImport(@RequestParam String groupUuid,
+			@RequestParam String opsi) {
+		return clientService.listClientsForImport(UUID.fromString(groupUuid), opsi);
 	}
 
 	@RequestMapping(value = "/clients/hardware/list", method = RequestMethod.GET)

@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.security.access.AccessDecisionManager;
@@ -45,6 +46,7 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	private ApplicationEventPublisher eventPublisher;
 	private AccessDecisionManager accessDecisionManager;
 	private OpsiClientService opsiClientService;
+	private OpsiClientService opsiClientService2;
 
 	/* (non-Javadoc)
 	 * @see cz.muni.ucn.opsi.api.client.ClientService#createClient(java.util.UUID)
@@ -142,13 +144,20 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	}
 
 	/* (non-Javadoc)
-	 * @see cz.muni.ucn.opsi.api.client.ClientService#listClientsForImport(java.util.UUID)
+	 * @see cz.muni.ucn.opsi.api.client.ClientService#listClientsForImport(java.util.UUID, java.lang.String)
 	 */
 	@Override
-	public List<Client> listClientsForImport(UUID groupUuid) {
+	public List<Client> listClientsForImport(UUID groupUuid, String opsi) {
 		Group group = groupService.getGroup(groupUuid);
 
-		List<Client> clients = opsiClientService.listClientsForImport();
+		List<Client> clients;
+		if ("0".equals(opsi)) {
+			clients = opsiClientService.listClientsForImport();
+		} else if ("1".equals(opsi)) {
+			clients = opsiClientService2.listClientsForImport();
+		} else {
+			throw new IllegalArgumentException("unknown opsi code: " + opsi);
+		}
 		List<String> namesList = clientDao.listNamesAll();
 		Set<String> names = new HashSet<String>();
 		for (String name : namesList) {
@@ -223,5 +232,14 @@ public class ClientServiceImpl implements ClientService, ApplicationEventPublish
 	@Autowired
 	public void setOpsiClientService(OpsiClientService opsiClientService) {
 		this.opsiClientService = opsiClientService;
+	}
+	
+	/**
+	 * @param opsiClientService2 the opsiClientService2 to set
+	 */
+	@Autowired
+	@Qualifier("opsi2")
+	public void setOpsiClientService2(OpsiClientService opsiClientService2) {
+		this.opsiClientService2 = opsiClientService2;
 	}
 }

@@ -22,6 +22,7 @@ public class ClientController extends Controller {
 	public static final EventType CLIENT_DELETE = new EventType();
 	public static final EventType CLIENT_INSTALL = new EventType();
 	public static final EventType CLIENT_IMPORT = new EventType();
+	public static final EventType CLIENT_IMPORT2 = new EventType();
 	public static final EventType CLIENT_IMPORT_CSV = new EventType();
 	public static final EventType CLIENT_HARDWARE = new EventType();
 
@@ -41,6 +42,7 @@ public class ClientController extends Controller {
 		registerEventTypes(ClientController.CLIENT_DELETE);
 		registerEventTypes(ClientController.CLIENT_INSTALL);
 		registerEventTypes(ClientController.CLIENT_IMPORT);
+		registerEventTypes(ClientController.CLIENT_IMPORT2);
 		registerEventTypes(ClientController.CLIENT_IMPORT_CSV);
 		registerEventTypes(ClientController.CLIENT_HARDWARE);
 		registerEventTypes(CometController.LIFECYCLE_EVENT_TYPE);
@@ -64,6 +66,8 @@ public class ClientController extends Controller {
 			clientInstall(event);
 		} else if (ClientController.CLIENT_IMPORT == type) {
 			clientImport(event);
+		} else if (ClientController.CLIENT_IMPORT2 == type) {
+			clientImport2(event);
 		} else if (ClientController.CLIENT_IMPORT_CSV == type) {
 			clientImportCSV(event);
 		} else if (ClientController.CLIENT_HARDWARE == type) {
@@ -128,6 +132,13 @@ public class ClientController extends Controller {
 		forwardToView(clientImportView, event);
 	}
 
+	/**
+	 * @param event
+	 */
+	private void clientImport2(AppEvent event) {
+		forwardToView(clientImportView, event);
+	}
+	
 	/**
 	 * @param event
 	 */

@@ -44,17 +44,21 @@ public class ClientImportWindow extends Window {
 //	private FormPanel form;
 
 	private GroupJSO group;
+	private boolean master;
 	protected ListStore<BeanModel> clientStore;
 	protected Grid<BeanModel> clientsGrid;
 	protected BeanModelFactory clientFactory;
 
 	private int importCount = 0;
 
+
 	/**
+	 * @param master 
 	 * @param newClient
 	 */
-	public ClientImportWindow(GroupJSO group) {
+	public ClientImportWindow(GroupJSO group, boolean master) {
 		this.group = group;
+		this.master = master;
 
 		clientConstants = GWT.create(ClientConstants.class);
 
@@ -151,7 +155,7 @@ public class ClientImportWindow extends Window {
 	protected void loadData() {
 		ClientService clientService = ClientService.getInstance();
 
-		clientService.listClientsForImport(this.group, new RemoteRequestCallback<List<ClientJSO>>() {
+		clientService.listClientsForImport(this.group, master, new RemoteRequestCallback<List<ClientJSO>>() {
 			@Override
 			public void onRequestSuccess(List<ClientJSO> clients) {
 				List<BeanModel> clientModels = clientFactory.createModel(clients);

@@ -44,7 +44,7 @@ public class ClientImportCSVView extends ClientImportView {
 			@Override
 			public void handleEvent(BaseEvent be) {
 				ClientImportCSVView.this.data = dialog.getReturnedData();
-				importGroupWindow(group);
+				importGroupWindow(group, true);
 			}
 		});
 
